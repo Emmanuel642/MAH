@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Language } from '../types';
 import { TRANSLATIONS } from '../data/translations';
-import { ArrowRight, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 
 interface ContactSectionProps {
   language: Language;
@@ -24,11 +24,50 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
     message: '',
   });
 
+  const [honeypot, setHoneypot] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setErrorMessage(null);
+    setLoading(true);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formState.name,
+          email: formState.email,
+          phone: formState.phone,
+          project_type: formState.project_type,
+          message: formState.message,
+          company_website: honeypot,
+        }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok || !data.success) {
+        throw new Error(
+          data.error ||
+            "Impossible d'envoyer votre demande pour le moment. Veuillez réessayer dans quelques instants."
+        );
+      }
+
+      setSubmitted(true);
+    } catch (err: any) {
+      setErrorMessage(
+        err?.message ||
+          "Impossible d'envoyer votre demande pour le moment. Veuillez réessayer dans quelques instants."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const offices = [
@@ -173,6 +212,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   type="button"
                   onClick={() => {
                     setSubmitted(false);
+                    setErrorMessage(null);
+                    setHoneypot('');
                     setFormState({
                       name: '',
                       email: '',
@@ -181,13 +222,40 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                       message: '',
                     });
                   }}
-                  className="inline-flex items-center gap-2 bg-[#000000] text-white font-label-technical text-label-technical uppercase tracking-widest px-8 py-3.5 hover:bg-[#765935] transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-2 bg-[#000000] text-white font-label-technical text-label-technical tracking-widest uppercase px-8 py-3.5 hover:bg-[#765935] transition-colors cursor-pointer"
                 >
                   <span>Nouvelle demande</span>
                 </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-8">
+                {/* Honeypot antispam invisible pour les utilisateurs normaux (protégé contre l'autofill) */}
+                <div className="hidden" aria-hidden="true" style={{ display: 'none', position: 'absolute', opacity: 0, pointerEvents: 'none' }}>
+                  <label htmlFor="company_website">Ne pas remplir ce champ</label>
+                  <input
+                    id="company_website"
+                    name="company_website"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="new-password"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                  />
+                </div>
+
+                {/* Message d'erreur serveur éventuel */}
+                {errorMessage && (
+                  <div
+                    role="alert"
+                    className="p-4 bg-[#f8e8e8] border-l-2 border-[#b91c1c] text-[#7f1d1d] text-sm font-body-md flex items-start gap-3"
+                  >
+                    <AlertCircle className="w-5 h-5 text-[#b91c1c] shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium">{errorMessage}</p>
+                    </div>
+                  </div>
+                )}
+
                 {/* Full Name */}
                 <div className="space-y-2">
                   <label
@@ -200,10 +268,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                     id="name"
                     required
                     type="text"
+                    disabled={loading}
                     value={formState.name}
                     onChange={(e) => setFormState({ ...formState, name: e.target.value })}
                     placeholder="Votre nom"
-                    className="w-full bg-[#faf9f6] border-0 border-b border-[#000000] px-0 py-3 text-[#000000] placeholder:text-[#c4c7c7] focus:ring-0 focus:border-[#765935] focus:outline-none transition-colors font-body-md"
+                    className="w-full bg-[#faf9f6] border-0 border-b border-[#000000] px-0 py-3 text-[#000000] placeholder:text-[#c4c7c7] focus:ring-0 focus:border-[#765935] focus:outline-none transition-colors font-body-md disabled:opacity-60"
                   />
                 </div>
 
@@ -220,10 +289,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                       id="email"
                       required
                       type="email"
+                      disabled={loading}
                       value={formState.email}
                       onChange={(e) => setFormState({ ...formState, email: e.target.value })}
                       placeholder="votre@email.com"
-                      className="w-full bg-[#faf9f6] border-0 border-b border-[#000000] px-0 py-3 text-[#000000] placeholder:text-[#c4c7c7] focus:ring-0 focus:border-[#765935] focus:outline-none transition-colors font-body-md"
+                      className="w-full bg-[#faf9f6] border-0 border-b border-[#000000] px-0 py-3 text-[#000000] placeholder:text-[#c4c7c7] focus:ring-0 focus:border-[#765935] focus:outline-none transition-colors font-body-md disabled:opacity-60"
                     />
                   </div>
 
@@ -238,10 +308,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                       id="phone"
                       required
                       type="tel"
+                      disabled={loading}
                       value={formState.phone}
                       onChange={(e) => setFormState({ ...formState, phone: e.target.value })}
                       placeholder="+243 ..."
-                      className="w-full bg-[#faf9f6] border-0 border-b border-[#000000] px-0 py-3 text-[#000000] placeholder:text-[#c4c7c7] focus:ring-0 focus:border-[#765935] focus:outline-none transition-colors font-body-md"
+                      className="w-full bg-[#faf9f6] border-0 border-b border-[#000000] px-0 py-3 text-[#000000] placeholder:text-[#c4c7c7] focus:ring-0 focus:border-[#765935] focus:outline-none transition-colors font-body-md disabled:opacity-60"
                     />
                   </div>
                 </div>
@@ -257,9 +328,10 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   <select
                     id="project_type"
                     required
+                    disabled={loading}
                     value={formState.project_type}
                     onChange={(e) => setFormState({ ...formState, project_type: e.target.value })}
-                    className="w-full bg-[#faf9f6] border-0 border-b border-[#000000] px-0 py-3 text-[#000000] focus:ring-0 focus:border-[#765935] focus:outline-none transition-colors font-body-md cursor-pointer"
+                    className="w-full bg-[#faf9f6] border-0 border-b border-[#000000] px-0 py-3 text-[#000000] focus:ring-0 focus:border-[#765935] focus:outline-none transition-colors font-body-md cursor-pointer disabled:opacity-60"
                   >
                     <option value="" disabled>
                       {t.form.typeDefault}
@@ -284,10 +356,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                     id="message"
                     required
                     rows={4}
+                    disabled={loading}
                     value={formState.message}
                     onChange={(e) => setFormState({ ...formState, message: e.target.value })}
                     placeholder="Décrivez brièvement votre projet..."
-                    className="w-full bg-[#faf9f6] border-0 border-b border-[#000000] px-0 py-3 text-[#000000] placeholder:text-[#c4c7c7] focus:ring-0 focus:border-[#765935] focus:outline-none transition-colors font-body-md resize-none"
+                    className="w-full bg-[#faf9f6] border-0 border-b border-[#000000] px-0 py-3 text-[#000000] placeholder:text-[#c4c7c7] focus:ring-0 focus:border-[#765935] focus:outline-none transition-colors font-body-md resize-none disabled:opacity-60"
                   />
                 </div>
 
@@ -295,10 +368,20 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                 <div className="pt-2">
                   <button
                     type="submit"
-                    className="inline-flex items-center gap-2 bg-[#000000] text-white font-label-technical text-label-technical tracking-widest uppercase px-10 py-4 hover:bg-[#765935] transition-colors cursor-pointer"
+                    disabled={loading}
+                    className="inline-flex items-center gap-2 bg-[#000000] text-white font-label-technical text-label-technical tracking-widest uppercase px-10 py-4 hover:bg-[#765935] disabled:bg-[#444748] disabled:cursor-not-allowed transition-colors cursor-pointer"
                   >
-                    <span>{t.form.submit}</span>
-                    <ArrowRight className="w-4 h-4" />
+                    {loading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Envoi en cours...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>{t.form.submit}</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </>
+                    )}
                   </button>
                 </div>
               </form>
