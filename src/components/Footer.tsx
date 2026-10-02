@@ -256,7 +256,7 @@ export const Footer: React.FC<FooterProps> = ({
                     <strong>Téléphones :</strong> +243 991 999 901 &nbsp;|&nbsp; +243 850 001 001
                   </p>
                   <p>
-                    <strong>Direction Générale :</strong> Zoé JAMES CISKA, Architecte.
+                    <strong>Direction Générale :</strong> Directeur Général, Architecte.
                   </p>
                   <p>
                     <strong>Domaines d’intervention :</strong> Architecture contemporaine, études d’ingénierie structurelle, génie civil, entreprise de construction générale et fourniture de matériaux de construction.

@@ -46,8 +46,8 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
         >
           <img
             alt="Logo MHA Modern Home Architecture"
-            className="h-8 w-auto object-contain transition-opacity duration-200 group-hover:opacity-85"
-            src="https://lh3.googleusercontent.com/aida/AEtjO1V8M1MZcp467lmT0cubfnDy-QPqBjbFCkI31wtKzKi8qeoEgeAQiFrAqyDA_JHlQBtPi_oyvD8pkmAPc3Wz6K26wNA9f-Ljwu1SJ2WdqGynvFey6JunKAiObpw5Dq-urrPOsBkX1G7zJ1L3JRd9rMlkN0eQg3WD89mEWsiHnRi_vwUVA57zL8bJpWLF4bNtK629lbXhm5tjoHEFS-ptb6K8CZyJyzAoSwGrIr8pIHZ-yll9JnSiO_gwDU0b"
+            className="h-16 md:h-20 w-auto object-contain transition-opacity duration-200 group-hover:opacity-85"
+            src="/src/assets/images/logo-mha.png"
           />
           <div className="hidden sm:flex flex-col border-l border-[#c4c7c7]/40 pl-3">
             <span className="font-headline-md text-[16px] tracking-tight uppercase font-medium text-[#000000] leading-tight">

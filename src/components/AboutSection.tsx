@@ -68,9 +68,9 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ language }) => {
             <div className="lg:col-span-5">
               <div className="relative aspect-[4/5] bg-[#efeeeb] overflow-hidden border border-[#c4c7c7]/40 shadow-xs">
                 <img
-                  alt="Zoé JAMES CISKA Directrice Générale MHA"
+                  alt="Directeur Général MHA"
                   className="w-full h-full object-cover"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-W1gkBnew7fdMwH9YTZusSjgmFAbExqm4FGrjPrJTRIF4cP_QXNu7xy2oB_WvJXeYBpzjl_-HTJvPVQrf4mSJjb5DgMKUWjCg_Ve7j6tKhq-u9o65EIq5cjBUFFhVVwCKOUDtg0GecwJDEspH63oK2QLS05YDU_IIrz_JGMsKADtMAD_dYt4f_8_8Ok2FerIFcNPD0u9JSvYjZcfCI3MSgnZ3KiVcoF1OSFFpytCxArZSJCC_VIUm_g"
+                  src="/src/assets/images/director-portrait.jpg"
                   referrerPolicy="no-referrer"
                 />
               </div>

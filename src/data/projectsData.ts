@@ -51,7 +51,7 @@ export const PROJECTS_DATA: Project[] = [
     year: '2024',
     surface: '580 M²',
     height: 'Plain-pied / Toiture à forte pente',
-    image: '/src/assets/images/villa_elevation_reelle_1790686559026.jpg',
+    image: '/src/assets/images/villa_luano_katanga_1790685910085.jpg',
     description: "Conçue pour les exigences climatiques du Haut-Katanga, cette villa contemporaine allie façades immaculées à modénatures géométriques grises, toiture monumentale en tuiles thermo-laquées foncées et porche d’accueil à arcades et colonnes jumelées.",
     fullNarrative: "Édifiée le long de la Route de l’Aéroport (secteur Luano City / Commune Annexe) à Lubumbashi, la Villa Luano City répond aux fortes amplitudes thermiques et aux pluies diluviennes de la saison humide katangaise. La charpente métallique haute pente garantit l’évacuation immédiate des eaux de ruissellement, tandis que les avant-toits protègent les baies vitrées des rayons zénithaux en saison sèche. La concession bénéficie d’un pavage intégral en pavés autobloquants vibrés haute résistance, évitant la poussière latéritique et les boues tropicales.",
     specs: {
@@ -77,7 +77,7 @@ export const PROJECTS_DATA: Project[] = [
     year: '2024',
     surface: '720 M²',
     height: 'Plain-pied étendu',
-    image: '/src/assets/images/drone_villa_katanga_1790686546337.jpg',
+    image: '/src/assets/images/residence_annexe_aerial_1790685925017.jpg',
     description: "Vue aérienne d'une réalisation clé en main MHA : clôture périmétrique maçonnée avec couronnement de poteaux, toiture complexe multi-arêtiers, cour pavée étanche et système d'évacuation gravitaire des eaux pluviales.",
     fullNarrative: "Ce domaine familial privé témoigne de l'approche intégrée de MHA à Lubumbashi, combinant bureau d'études et centrale de fourniture de matériaux de construction. Face aux sols argilo-sablonneux du Katanga, les fondations reposent sur des semelles filantes et longrines en béton armé hydrofugé. La concession est protégée par un mur d'enceinte en blocs chaînés avec harponnage, système d'électrification périmétrique et château d'eau autonome de 10 000 litres avec surpresseur.",
     specs: {
@@ -103,7 +103,7 @@ export const PROJECTS_DATA: Project[] = [
     year: '2024',
     surface: '640 M²',
     height: 'Plain-pied contemporain',
-    image: '/src/assets/images/villa_golf_nuit_1790687116838.jpg',
+    image: '/src/assets/images/villa_golf_lubumbashi_1790685952085.jpg',
     description: "Prise de vue nocturne sur chantier : mise en lumière des casquettes en débord par spots LED encastrés, façades en enduit minéral gris texturé, soubassement en parement de pierre naturelle et menuiseries aluminium sécurisées.",
     fullNarrative: "Implantée dans le quartier résidentiel prisé du Golf à Lubumbashi, cette villa de plain-pied combine pureté géométrique et mise en valeur architecturale nocturne. Les débords de toiture intègrent une série de spots LED étanches qui ceinturent la villa, soulignant les textures de l'enduit minéral gratté et le soubassement habillé de briquettes de pierre naturelle sombre. MHA a assuré l'ensemble des études de structures, les installations électriques de précision et la réalisation tout corps d'état.",
     specs: {
@@ -130,32 +130,6 @@ export const PROJECTS_DATA: Project[] = [
     }
   },
   {
-    id: 'chantier-belair-finition',
-    code: '04',
-    title: 'Résidence Bel-Air & Finitions',
-    tagline: 'Chantier d’exécution, voirie pavée et assainissement pluvial au Katanga',
-    type: 'Construction · BTP',
-    category: ['Construction', 'Génie civil', 'Résidentiel'],
-    city: 'Lubumbashi',
-    location: 'Lubumbashi / Bel-Air — 2024',
-    year: '2024',
-    surface: '490 M²',
-    height: 'Plain-pied contemporain',
-    image: '/src/assets/images/chantier_villa_reel_1790686529029.jpg',
-    description: "Phase de finition extérieure sur chantier MHA : terrassement des tranchées d'évacuation pluviale, calibrage des bordures, pose minutieuse des pavés de cour et application d'enduits minéraux protecteurs.",
-    fullNarrative: "Ce chantier illustre le savoir-faire de terrain de nos équipes d'exécution à Lubumbashi. Dans un contexte de saisons des pluies intenses, la gestion des pentes de ruissellement et le raccordement étanche des caniveaux vers l'exutoire communal constituent la clé de la pérennité du bâti. MHA a fourni et posé l'ensemble des revêtements extérieurs en garantissant une durabilité maximale contre l'érosion pluviale.",
-    specs: {
-      superficie: '490 m² sur concession de 950 m²',
-      hauteur: 'Plain-pied',
-      annee: '2024 (Phase finale d’aménagement)',
-      localisation: 'Bel-Air, Lubumbashi, Katanga DRC',
-      coordonnees: "11°39'12\"S 27°30'05\"E",
-      programme: 'Résidence familiale, réseau de drainage d’orage sous dallage, clôture périmétrique avec éclairage solaire autonome',
-      materiaux: ['Enduit de façade gratté hydrofuge blanc minéral', 'Bordures de caniveaux préfabriquées MHA', 'Pavés béton 40x40 cm grenaillés', 'Grilles d’aération protégées'],
-      phases: ['Terrassement & tranchées techniques', 'Pose du pavage haute compacité', 'Enduits extérieurs et teintes minérales', 'Contrôle qualité & réception']
-    }
-  },
-  {
     id: 'parking-parcellaire-metallique',
     code: '05',
     title: 'Parking Parcellaire Métallique',
@@ -167,7 +141,7 @@ export const PROJECTS_DATA: Project[] = [
     year: '2024',
     surface: '120 M²',
     height: 'Gabarit libre 3.40 m sous poutre',
-    image: '/src/assets/images/parking_reel_chantier_1790686512603.jpg',
+    image: '/src/assets/images/parking_metallique_1790686297016.jpg',
     description: "Nous avons conçu et réalisé un parking parcellaire en structure métallique professionnelle, alliant robustesse et modernité. Plus qu’un simple espace de stationnement, c’est une œuvre architecturale qui apporte une touche d’élégance et de beauté à votre parcelle. Avec Modern Home Concept, chaque projet devient une signature de durabilité et d’esthétique.",
     fullNarrative: "Nous avons conçu et réalisé un parking parcellaire en structure métallique professionnelle, alliant robustesse et modernité. Plus qu’un simple espace de stationnement, c’est une œuvre architecturale qui apporte une touche d’élégance et de beauté à votre parcelle. Avec Modern Home Concept, chaque projet devient une signature de durabilité et d’esthétique.\n\nConçue pour abriter durablement les véhicules des fortes chaleurs équatoriales et des averses tropicales intenses du Katanga, cette infrastructure repose sur une ossature en profilés d'acier tubulaires lourds traités par poudrage époxy noir mat. Les élégants claustras verticaux latéraux agissent comme brise-soleil et brise-vue tout en conférant une ligne géométrique résolument contemporaine. L'ensemble s'intègre sur une esplanade pavée haute résistance.",
     specs: {
@@ -205,7 +179,7 @@ export const PROJECTS_DATA: Project[] = [
     year: '2024',
     surface: '920 M²',
     height: 'R+2',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBjRF62Fz2rhlPI_NvsgtLOzZQ4n22EtkpI6SpQBLFCyj-TvLfljy0eoljFshO8zVAhkF53Z4v725-FxkX0rp-uPCFVMxKbxY_ZvybW2VLaBXObWXMTutMIHiQg9wVUrLm92bcInYi9dT4AVf9PTCW4pob0weP18JCa1h18-IaIau7wj899Bs6p3IJTEhmmizeLdpld_oExIPOPhyzaKHcEWjmsuUlcqUZVgH_BppS7docSb_e7SwuC_A',
+    image: '/src/assets/images/villa_elevation_reelle_1790686559026.jpg',
     description: "Composition résidentielle privée aux lignes pures en béton matricé, cours d'eau réfléchissants et protections solaires en bois d'iroko thermotraité.",
     fullNarrative: "Conçue pour un client privé au cœur de la commune de la Gombe à Kinshasa, la Résidence Mont-Fleury développe un dialogue franc entre monumentalité minérale et intimité tropicale. Le parti architectural repose sur l'alternance de voiles en béton matricé coulé sur place et d'amples porte-à-faux calculés pour abriter les façades vitrées du rayonnement équatorial direct.",
     specs: {
@@ -217,32 +191,6 @@ export const PROJECTS_DATA: Project[] = [
       programme: 'Villa de maître, 5 suites, espace réceptions, galerie privée, pavillon d’hôtes et miroir d’eau',
       materiaux: ['Béton architectonique matricé', 'Bardage bois d’iroko certifié FSC', 'Profilés aluminium thermolaqué noir basalte', 'Pierre calcaire locale de Kimpese'],
       phases: ['Étude géotechnique & esquisse', 'Dossier de permis de bâtir', 'Ingénierie structurelle BA', 'Direction & exécution tout corps d’état']
-    }
-  },
-  {
-    id: 'elysee-hq',
-    code: '07',
-    title: 'Siège Corporatif Elysée',
-    tagline: 'Monumentalité tertiaire à haute inertie thermique pour le Katanga',
-    type: 'Architecture · Génie civil',
-    category: ['Architecture', 'Génie civil', 'Tertiaire'],
-    city: 'Lubumbashi',
-    location: 'Lubumbashi / Centre d’affaires — 2023',
-    year: '2023',
-    surface: '4 850 M²',
-    height: 'R+6 / INGÉNIERIE BTP',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAFsY-_JDH6f2pqLLvt6wqe5Feoz74zy1axPIUK-axNn1j-xQhlOGSUoZNxszV7vot8HRl-V_HRcNAhR5t-mmBwbwsXx4AotWKOA0oZccTecVD5Fro_oUYVr4RTeReUOeh1_rd7y36FOPIvxvPhrqRCuq7J1qD4CClxLSwFGnEW_m670K-YWGk0ue5LvvHRK-esDanJOKA76uwjwHXBdCONcRs2U0f2CQL8GSKnHKWnkWRCqCafG75hYw',
-    description: "Édifice tertiaire monumental en béton armé à forte inertie thermique, conçu pour résister aux amplitudes climatiques katangaises avec brise-soleil en résille de béton brut.",
-    fullNarrative: "Le Siège Corporatif Elysée à Lubumbashi affirme la présence institutionnelle d'un groupe industriel majeur au Katanga. L'enveloppe extérieure associe une résille brise-soleil en béton brut auto-plaçant à un vitrage à isolation renforcée, réduisant de 38% les charges de climatisation en saison sèche. Les plateaux libres sans poteaux intermédiaires offrent une flexibilité maximale.",
-    specs: {
-      superficie: '4 850 m² utiles sur 7 niveaux',
-      hauteur: 'R+6 (26.50 m)',
-      annee: '2022 - 2023 (Inauguré)',
-      localisation: 'Centre d’affaires, Lubumbashi, Haut-Katanga, RDC',
-      coordonnees: "11°39'48\"S 27°28'33\"E",
-      programme: 'Siège social, auditoriums, salles du conseil d’administration, bureaux paysagers et sous-sol technique',
-      materiaux: ['Béton armé brut coffrage planche', 'Verre trempé feuilleté à contrôle solaire', 'Acier corten patiné', 'Dalles de granit noir poli'],
-      phases: ['Avant-projet sommaire & définitif', 'Notes de calculs parasismiques & descente de charges', 'Coordination SSI et génie climatique', 'Livraison clé en main']
     }
   }
 ];

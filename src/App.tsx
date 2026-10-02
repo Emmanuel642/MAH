@@ -88,18 +88,18 @@ export default function App() {
         {/* 04 — Chiffres Clés : Éléments visuels directs sans blocs de texte superflus */}
         <KeyMetricsSection language={language} />
 
-        {/* 05 — Réalisations : Cœur immersif, mode monographique, uniquement l'essentiel */}
+        {/* 05 — Vidéo Chantier & Visite Immersive : mise en avant pour le storytelling du projet */}
+        <VideoShowcaseSection
+          language={language}
+          onOpenEstimator={() => handleOpenEstimatorWithProgram('Suivi de chantier & Réalisation')}
+        />
+
+        {/* 06 — Réalisations : Cœur immersif, mode monographique, uniquement l'essentiel */}
         <ProjectsSection
           projects={PROJECTS_DATA}
           language={language}
           onSelectProject={handleOpenProject}
           onNavigateSection={handleNavigateSection}
-        />
-
-        {/* 05B — Vidéo Chantier & Visite Immersive : Mise en avant vidéo in situ */}
-        <VideoShowcaseSection
-          language={language}
-          onOpenEstimator={() => handleOpenEstimatorWithProgram('Suivi de chantier & Réalisation')}
         />
 
         {/* 06 — Services : 4 textes courts éditoriaux */}
