@@ -14,7 +14,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ language }) => {
     <div id="a-propos">
       {/* 01 — À Propos : Introduction Institutionnelle */}
       <section className="bg-[#faf9f6] border-b border-[#c4c7c7]/30 py-24 md:py-32">
-        <div className="max-w-[1680px] mx-auto px-6 md:px-16 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+        <div className="max-w-[1440px] mx-auto px-5 md:px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           <div className="lg:col-span-5 space-y-3">
             <span className="font-label-technical text-label-technical tracking-widest uppercase text-[#765935] font-bold block">
               {t.tag}
@@ -32,7 +32,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ language }) => {
 
       {/* 02 — Vision & Mission : Grand Espace Négatif */}
       <section className="bg-[#f4f3f1] border-b border-[#c4c7c7]/30 py-24 md:py-32">
-        <div className="max-w-[1680px] mx-auto px-6 md:px-16 grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24">
+        <div className="max-w-[1440px] mx-auto px-5 md:px-8 lg:px-12 grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24">
           {/* Vision */}
           <div className="space-y-4">
             <span className="font-label-technical text-label-technical tracking-widest uppercase text-[#765935] font-bold block">
@@ -63,7 +63,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ language }) => {
 
       {/* 03 — Direction Générale : Portrait Éditorial Épuré */}
       <section className="bg-[#faf9f6] border-b border-[#c4c7c7]/30 py-24 md:py-32">
-        <div className="max-w-[1680px] mx-auto px-6 md:px-16">
+        <div className="max-w-[1440px] mx-auto px-5 md:px-8 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             {/* Portrait Photo */}
             <div className="lg:col-span-5">

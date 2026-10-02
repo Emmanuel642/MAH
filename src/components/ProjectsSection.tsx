@@ -27,7 +27,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
 
   return (
     <section className="bg-[#faf9f6] border-b border-[#c4c7c7]/30 py-24 md:py-32" id="projets">
-      <div className="max-w-[1680px] mx-auto px-6 md:px-16">
+      <div className="max-w-[1440px] mx-auto px-5 md:px-8 lg:px-12">
         {/* Section Header: Pure & Airy */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-12">
           <div className="max-w-2xl space-y-3">

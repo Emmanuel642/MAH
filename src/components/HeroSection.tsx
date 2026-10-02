@@ -19,7 +19,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
   return (
     <section className="relative bg-[#faf9f6] border-b border-[#c4c7c7]/30 pt-16 pb-20 md:py-28 overflow-hidden" id="top">
-      <div className="max-w-[1680px] mx-auto px-6 md:px-16 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+      <div className="max-w-[1440px] mx-auto px-5 md:px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
         {/* Left Column: Pure Tectonic Statement */}
         <div className="lg:col-span-6 flex flex-col justify-center space-y-8">
           <div className="space-y-4">

@@ -16,7 +16,7 @@ export const ExpertisePillars: React.FC<ExpertisePillarsProps> = ({
 
   return (
     <section className="bg-[#faf9f6] border-b border-[#c4c7c7]/30 py-20 md:py-24">
-      <div className="max-w-[1680px] mx-auto px-6 md:px-16">
+      <div className="max-w-[1440px] mx-auto px-5 md:px-8 lg:px-12">
         <div className="max-w-2xl mb-12">
           <span className="font-label-technical text-label-technical tracking-widest uppercase text-[#765935] font-bold block mb-2">
             {t.tag}

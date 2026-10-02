@@ -11,7 +11,7 @@ export const ApproachSection: React.FC<ApproachSectionProps> = ({ language }) =>
 
   return (
     <section className="bg-[#f4f3f1] border-b border-[#c4c7c7]/30 py-24 md:py-32" id="approche">
-      <div className="max-w-[1680px] mx-auto px-6 md:px-16">
+      <div className="max-w-[1440px] mx-auto px-5 md:px-8 lg:px-12">
         <div className="max-w-2xl mb-16 space-y-3">
           <span className="font-label-technical text-label-technical tracking-widest uppercase text-[#765935] font-bold block">
             {t.tag}

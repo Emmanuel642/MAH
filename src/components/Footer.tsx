@@ -37,7 +37,7 @@ export const Footer: React.FC<FooterProps> = ({
   return (
     <>
       <footer className="bg-[#000000] text-white border-t border-[#747878]/20">
-        <div className="w-full px-6 md:px-16 py-16 md:py-20 max-w-[1680px] mx-auto flex flex-col justify-between">
+        <div className="w-full px-5 md:px-8 lg:px-12 py-16 md:py-20 max-w-[1440px] mx-auto flex flex-col justify-between">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 pb-16 border-b border-white/10">
             {/* Brand */}
             <div className="lg:col-span-4 space-y-3">

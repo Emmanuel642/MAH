@@ -58,7 +58,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#faf9f6] text-[#1a1c1a] antialiased flex flex-col font-body-md text-body-md selection:bg-[#000000] selection:text-[#faf9f6]">
+    <div className="min-h-screen bg-[#faf9f6] text-[#1a1c1a] antialiased flex flex-col font-body-md text-body-md selection:bg-[#000000] selection:text-[#faf9f6] overflow-x-hidden">
       {/* 01 — Navigation Bar : Calme, lisible, avec FR/EN discret */}
       <HeaderNav
         language={language}

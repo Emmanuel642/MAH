@@ -178,7 +178,7 @@ export const VideoShowcaseSection: React.FC<VideoShowcaseSectionProps> = ({
       {/* Background Architectural Grid Lines */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
 
-      <div className="max-w-[1680px] mx-auto px-6 md:px-16 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-5 md:px-8 lg:px-12 relative z-10">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-12 border-b border-[#2d2e2d]">
           <div className="max-w-3xl space-y-3">
