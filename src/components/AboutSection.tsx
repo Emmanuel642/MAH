@@ -1,6 +1,7 @@
 import React from 'react';
 import { Language } from '../types';
 import { TRANSLATIONS } from '../data/translations';
+import directorPortrait from '../assets/images/director-portrait.jpg';
 
 interface AboutSectionProps {
   language: Language;
@@ -70,7 +71,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ language }) => {
                 <img
                   alt="Directeur Général MHA"
                   className="w-full h-full object-cover"
-                  src="/src/assets/images/director-portrait.jpg"
+                  src={directorPortrait}
                   referrerPolicy="no-referrer"
                 />
               </div>

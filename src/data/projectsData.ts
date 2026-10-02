@@ -1,4 +1,10 @@
 import { Project } from '../types';
+import villaCharcoalHome from '../assets/images/villa_charcoal_home_1790686776772.jpg';
+import villaLuanoKatanga from '../assets/images/villa_luano_katanga_1790685910085.jpg';
+import residenceAnnexeAerial from '../assets/images/residence_annexe_aerial_1790685925017.jpg';
+import villaGolfLubumbashi from '../assets/images/villa_golf_lubumbashi_1790685952085.jpg';
+import parkingMetallique from '../assets/images/parking_metallique_1790686297016.jpg';
+import villaElevationReelle from '../assets/images/villa_elevation_reelle_1790686559026.jpg';
 
 export const PROJECTS_DATA: Project[] = [
   {
@@ -13,7 +19,7 @@ export const PROJECTS_DATA: Project[] = [
     year: '2024',
     surface: '450 M²',
     height: 'Plain-pied contemporain à toitures plates décaissées',
-    image: '/src/assets/images/villa_charcoal_home_1790686776772.jpg',
+    image: villaCharcoalHome,
     description: "Volumétrie minimaliste affirmée, façades texturées gris anthracite, baies vitrées toute hauteur avec vitrage à contrôle solaire et casquettes d'ombrage en porte-à-faux. Une création exclusive signée Modern Home Concept.",
     fullNarrative: "La Villa Anthracite Modern Home incarne la vision avant-gardiste de notre cabinet : une réinterprétation audacieuse de l’habitat contemporain en République Démocratique du Congo. Les volumes géométriques imbriqués créent des jeux d'ombres nets protégeant les espaces intérieurs des rayonnements solaires directs. Les larges ouvertures vitrées en aluminium noir de première qualité invitent le paysage extérieur au cœur du séjour. La terrasse latérale ceinte d'un garde-corps en verre trempé et les marches immaculées soulignent l'élégance sobre de cet ouvrage d'exception.",
     specs: {
@@ -51,7 +57,7 @@ export const PROJECTS_DATA: Project[] = [
     year: '2024',
     surface: '580 M²',
     height: 'Plain-pied / Toiture à forte pente',
-    image: '/src/assets/images/villa_luano_katanga_1790685910085.jpg',
+    image: villaLuanoKatanga,
     description: "Conçue pour les exigences climatiques du Haut-Katanga, cette villa contemporaine allie façades immaculées à modénatures géométriques grises, toiture monumentale en tuiles thermo-laquées foncées et porche d’accueil à arcades et colonnes jumelées.",
     fullNarrative: "Édifiée le long de la Route de l’Aéroport (secteur Luano City / Commune Annexe) à Lubumbashi, la Villa Luano City répond aux fortes amplitudes thermiques et aux pluies diluviennes de la saison humide katangaise. La charpente métallique haute pente garantit l’évacuation immédiate des eaux de ruissellement, tandis que les avant-toits protègent les baies vitrées des rayons zénithaux en saison sèche. La concession bénéficie d’un pavage intégral en pavés autobloquants vibrés haute résistance, évitant la poussière latéritique et les boues tropicales.",
     specs: {
@@ -77,7 +83,7 @@ export const PROJECTS_DATA: Project[] = [
     year: '2024',
     surface: '720 M²',
     height: 'Plain-pied étendu',
-    image: '/src/assets/images/residence_annexe_aerial_1790685925017.jpg',
+    image: residenceAnnexeAerial,
     description: "Vue aérienne d'une réalisation clé en main MHA : clôture périmétrique maçonnée avec couronnement de poteaux, toiture complexe multi-arêtiers, cour pavée étanche et système d'évacuation gravitaire des eaux pluviales.",
     fullNarrative: "Ce domaine familial privé témoigne de l'approche intégrée de MHA à Lubumbashi, combinant bureau d'études et centrale de fourniture de matériaux de construction. Face aux sols argilo-sablonneux du Katanga, les fondations reposent sur des semelles filantes et longrines en béton armé hydrofugé. La concession est protégée par un mur d'enceinte en blocs chaînés avec harponnage, système d'électrification périmétrique et château d'eau autonome de 10 000 litres avec surpresseur.",
     specs: {
@@ -103,7 +109,7 @@ export const PROJECTS_DATA: Project[] = [
     year: '2024',
     surface: '640 M²',
     height: 'Plain-pied contemporain',
-    image: '/src/assets/images/villa_golf_lubumbashi_1790685952085.jpg',
+    image: villaGolfLubumbashi,
     description: "Prise de vue nocturne sur chantier : mise en lumière des casquettes en débord par spots LED encastrés, façades en enduit minéral gris texturé, soubassement en parement de pierre naturelle et menuiseries aluminium sécurisées.",
     fullNarrative: "Implantée dans le quartier résidentiel prisé du Golf à Lubumbashi, cette villa de plain-pied combine pureté géométrique et mise en valeur architecturale nocturne. Les débords de toiture intègrent une série de spots LED étanches qui ceinturent la villa, soulignant les textures de l'enduit minéral gratté et le soubassement habillé de briquettes de pierre naturelle sombre. MHA a assuré l'ensemble des études de structures, les installations électriques de précision et la réalisation tout corps d'état.",
     specs: {
@@ -141,7 +147,7 @@ export const PROJECTS_DATA: Project[] = [
     year: '2024',
     surface: '120 M²',
     height: 'Gabarit libre 3.40 m sous poutre',
-    image: '/src/assets/images/parking_metallique_1790686297016.jpg',
+    image: parkingMetallique,
     description: "Nous avons conçu et réalisé un parking parcellaire en structure métallique professionnelle, alliant robustesse et modernité. Plus qu’un simple espace de stationnement, c’est une œuvre architecturale qui apporte une touche d’élégance et de beauté à votre parcelle. Avec Modern Home Concept, chaque projet devient une signature de durabilité et d’esthétique.",
     fullNarrative: "Nous avons conçu et réalisé un parking parcellaire en structure métallique professionnelle, alliant robustesse et modernité. Plus qu’un simple espace de stationnement, c’est une œuvre architecturale qui apporte une touche d’élégance et de beauté à votre parcelle. Avec Modern Home Concept, chaque projet devient une signature de durabilité et d’esthétique.\n\nConçue pour abriter durablement les véhicules des fortes chaleurs équatoriales et des averses tropicales intenses du Katanga, cette infrastructure repose sur une ossature en profilés d'acier tubulaires lourds traités par poudrage époxy noir mat. Les élégants claustras verticaux latéraux agissent comme brise-soleil et brise-vue tout en conférant une ligne géométrique résolument contemporaine. L'ensemble s'intègre sur une esplanade pavée haute résistance.",
     specs: {
@@ -179,7 +185,7 @@ export const PROJECTS_DATA: Project[] = [
     year: '2024',
     surface: '920 M²',
     height: 'R+2',
-    image: '/src/assets/images/villa_elevation_reelle_1790686559026.jpg',
+    image: villaElevationReelle,
     description: "Composition résidentielle privée aux lignes pures en béton matricé, cours d'eau réfléchissants et protections solaires en bois d'iroko thermotraité.",
     fullNarrative: "Conçue pour un client privé au cœur de la commune de la Gombe à Kinshasa, la Résidence Mont-Fleury développe un dialogue franc entre monumentalité minérale et intimité tropicale. Le parti architectural repose sur l'alternance de voiles en béton matricé coulé sur place et d'amples porte-à-faux calculés pour abriter les façades vitrées du rayonnement équatorial direct.",
     specs: {

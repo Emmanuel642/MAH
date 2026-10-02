@@ -2,6 +2,7 @@ import React from 'react';
 import { Language } from '../types';
 import { TRANSLATIONS } from '../data/translations';
 import { ArrowRight } from 'lucide-react';
+import heroVillaImage from '../assets/images/villa_charcoal_home_1790686776772.jpg';
 
 interface HeroSectionProps {
   language: Language;
@@ -57,7 +58,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <img
               alt="Villa Contemporaine Anthracite — Modern Home Concept / Architecture MHA"
               className="w-full h-full object-cover"
-              src="/src/assets/images/villa_charcoal_home_1790686776772.jpg"
+              src={heroVillaImage}
               referrerPolicy="no-referrer"
             />
           </div>

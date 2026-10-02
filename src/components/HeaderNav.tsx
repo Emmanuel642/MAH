@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Language } from '../types';
 import { TRANSLATIONS } from '../data/translations';
 import { ArrowUpRight, Menu, X } from 'lucide-react';
+import logoMha from '../assets/images/logo-mha.png';
 
 interface HeaderNavProps {
   language: Language;
@@ -47,7 +48,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
           <img
             alt="Logo MHA Modern Home Architecture"
             className="h-16 md:h-20 w-auto object-contain transition-opacity duration-200 group-hover:opacity-85"
-            src="/src/assets/images/logo-mha.png"
+            src={logoMha}
           />
           <div className="hidden sm:flex flex-col border-l border-[#c4c7c7]/40 pl-3">
             <span className="font-headline-md text-[16px] tracking-tight uppercase font-medium text-[#000000] leading-tight">

@@ -1,6 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Play, Pause, Volume2, VolumeX, Maximize2, ShieldCheck, MapPin, Eye, CheckCircle2 } from 'lucide-react';
 import { Language } from '../types';
+import videoPosterChantier from '../assets/images/video_poster_chantier_1790686955515.jpg';
+import droneVillaKatanga from '../assets/images/drone_villa_katanga_1790686546337.jpg';
+import chantierVillaReel from '../assets/images/chantier_villa_reel_1790686529029.jpg';
+import parkingReelChantier from '../assets/images/parking_reel_chantier_1790686512603.jpg';
 
 interface VideoShowcaseSectionProps {
   language: Language;
@@ -27,7 +31,7 @@ const CHAPTERS: Chapter[] = [
     titleEN: 'Entrance Porch & Main Facade',
     descFR: 'Marches monumentales suspendues, colonnes jumelées et enduit minéral blanc cassé',
     descEN: 'Monumental suspended steps, twin columns, and mineral stucco facade',
-    poster: '/src/assets/images/video_poster_chantier_1790686955515.jpg',
+    poster: videoPosterChantier,
   },
   {
     id: 'toiture',
@@ -37,7 +41,7 @@ const CHAPTERS: Chapter[] = [
     titleEN: 'Hipped Roof & Recessed Spots',
     descFR: 'Charpente haute pente en tuiles métalliques noires thermo-laquées et éclairage sous-face',
     descEN: 'High-pitch dark metal tile roof with integrated soffit downlights',
-    poster: '/src/assets/images/drone_villa_katanga_1790686546337.jpg',
+    poster: droneVillaKatanga,
   },
   {
     id: 'cloture',
@@ -47,7 +51,7 @@ const CHAPTERS: Chapter[] = [
     titleEN: 'Side Alley & Security Fence',
     descFR: 'Mur d’enceinte chaîné, appliques murales LED et dispositif d’électrification périmétrique',
     descEN: 'Reinforced boundary wall with LED sconces and perimeter electric fence',
-    poster: '/src/assets/images/chantier_villa_reel_1790686529029.jpg',
+    poster: chantierVillaReel,
   },
   {
     id: 'portail',
@@ -57,7 +61,7 @@ const CHAPTERS: Chapter[] = [
     titleEN: 'Motorized Gate & Compound',
     descFR: 'Portique d’entrée grande largeur avec portail coulissant en acier noir et cour en viabilisation',
     descEN: 'Wide entry portal with heavy black steel sliding gate and serviced compound',
-    poster: '/src/assets/images/parking_reel_chantier_1790686512603.jpg',
+    poster: parkingReelChantier,
   },
 ];
 
