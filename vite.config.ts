@@ -49,6 +49,31 @@ function apiDevMiddleware(): Plugin {
             return;
           }
         }
+
+        if (url === '/api/upload-video') {
+          if (req.method === 'POST') {
+            const fs = await import('fs');
+            const path = await import('path');
+            const chunks: Buffer[] = [];
+            req.on('data', (chunk) => chunks.push(chunk));
+            req.on('end', () => {
+              try {
+                const buffer = Buffer.concat(chunks);
+                const targetPath = path.resolve(process.cwd(), 'public/videos/chantier_villa_lubumbashi.mp4');
+                fs.mkdirSync(path.dirname(targetPath), { recursive: true });
+                fs.writeFileSync(targetPath, buffer);
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify({ success: true, url: '/videos/chantier_villa_lubumbashi.mp4' }));
+              } catch (err: any) {
+                res.statusCode = 500;
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify({ error: err?.message || 'Upload failed' }));
+              }
+            });
+            return;
+          }
+        }
         next();
       });
     },

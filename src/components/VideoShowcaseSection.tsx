@@ -1,84 +1,69 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2, VolumeX, Maximize2 } from 'lucide-react';
 import { Language } from '../types';
 import { TRANSLATIONS } from '../data/translations';
+import { Upload, CheckCircle2 } from 'lucide-react';
 import videoPosterChantier from '../assets/images/video_poster_chantier_1790686955515.jpg';
-import droneVillaKatanga from '../assets/images/drone_villa_katanga_1790686546337.jpg';
-import chantierVillaReel from '../assets/images/chantier_villa_reel_1790686529029.jpg';
-import parkingReelChantier from '../assets/images/parking_reel_chantier_1790686512603.jpg';
 
 interface VideoShowcaseSectionProps {
   language: Language;
   onOpenEstimator?: () => void;
 }
 
-const SEQUENCE_IMAGES = [
-  videoPosterChantier,
-  droneVillaKatanga,
-  chantierVillaReel,
-  parkingReelChantier,
-];
-
 export const VideoShowcaseSection: React.FC<VideoShowcaseSectionProps> = ({ language }) => {
   const t = TRANSLATIONS[language].video;
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
-  const [activeSequenceIndex, setActiveSequenceIndex] = useState(0);
-  const [progress, setProgress] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [videoSrc, setVideoSrc] = useState<string>('/videos/chantier_villa_lubumbashi.mp4');
+  const [isCustomUpload, setIsCustomUpload] = useState<boolean>(false);
+  const [uploadStatus, setUploadStatus] = useState<string | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const SEQUENCE_DURATION = 6; // 6 seconds per sequence
-  const TOTAL_DURATION = t.sequences.length * SEQUENCE_DURATION; // 24s total loop
-
-  // Cinematic timer loop when playback is active
+  // Check if a custom video blob was previously stored in sessionStorage
   useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (isPlaying) {
-      timer = setInterval(() => {
-        setProgress((prev) => {
-          const next = prev + 0.1;
-          if (next >= TOTAL_DURATION) {
-            return 0;
-          }
-          const nextIndex = Math.floor(next / SEQUENCE_DURATION);
-          if (nextIndex !== activeSequenceIndex && nextIndex < t.sequences.length) {
-            setActiveSequenceIndex(nextIndex);
-          }
-          return next;
-        });
-      }, 100);
+    try {
+      const stored = sessionStorage.getItem('mha_custom_video_uploaded');
+      if (stored) {
+        setIsCustomUpload(true);
+      }
+    } catch {
+      // Ignore storage errors
     }
-    return () => clearInterval(timer);
-  }, [isPlaying, activeSequenceIndex, TOTAL_DURATION, t.sequences.length]);
+  }, []);
 
-  const togglePlay = () => {
-    setIsPlaying((prev) => !prev);
-  };
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-  const toggleMute = () => {
-    setIsMuted((prev) => !prev);
-  };
+    // Immediately play the selected file locally via object URL
+    const localUrl = URL.createObjectURL(file);
+    setVideoSrc(localUrl);
+    setIsCustomUpload(true);
+    setUploadStatus(language === 'FR' ? 'Vidéo chargée avec succès' : 'Video loaded successfully');
 
-  const handleSelectSequence = (index: number) => {
-    setActiveSequenceIndex(index);
-    setProgress(index * SEQUENCE_DURATION);
-  };
-
-  const toggleFullscreen = () => {
-    if (!containerRef.current) return;
-    if (!document.fullscreenElement) {
-      containerRef.current.requestFullscreen().catch(() => {});
-    } else {
-      document.exitFullscreen().catch(() => {});
+    try {
+      sessionStorage.setItem('mha_custom_video_uploaded', 'true');
+    } catch {
+      // Ignore
     }
-  };
 
-  const activeSequence = t.sequences[activeSequenceIndex] || t.sequences[0];
+    // Also attempt background sync to server dev endpoint
+    try {
+      await fetch('/api/upload-video', {
+        method: 'POST',
+        headers: { 'Content-Type': file.type || 'video/mp4' },
+        body: file,
+      });
+    } catch {
+      // Local preview continues regardless
+    }
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    if (videoRef.current) {
+      videoRef.current.load();
+      videoRef.current.play().catch(() => {});
+    }
+
+    setTimeout(() => {
+      setUploadStatus(null);
+    }, 4000);
   };
 
   return (
@@ -87,8 +72,8 @@ export const VideoShowcaseSection: React.FC<VideoShowcaseSectionProps> = ({ lang
       className="bg-[#0d0e0d] text-[#faf9f6] py-16 md:py-24 border-b border-[#232423] relative overflow-hidden"
     >
       <div className="max-w-[1440px] mx-auto px-5 md:px-8 lg:px-12">
-        {/* En-tête Éditorial Harmonisé avec les sections adjacentes */}
-        <div className="max-w-3xl space-y-3 mb-8 md:mb-10">
+        {/* En-tête Éditorial */}
+        <div className="max-w-3xl space-y-3 mb-8 md:mb-12">
           <span className="font-label-technical text-label-technical tracking-widest uppercase text-[#c7a97b] font-bold block">
             {t.tag}
           </span>
@@ -96,143 +81,71 @@ export const VideoShowcaseSection: React.FC<VideoShowcaseSectionProps> = ({ lang
             {t.title}
           </h2>
           <p className="font-body-md text-[#9ea0a0] leading-relaxed max-w-2xl font-normal">
-            {t.desc}
+            {language === 'FR'
+              ? 'La visite brute du chantier : de la volumétrie architecturale aux finitions en cours d’exécution sur le terrain à Lubumbashi.'
+              : 'Raw on-site walkthrough: from architectural massing to turnkey execution details on site in Lubumbashi.'}
           </p>
         </div>
 
-        {/* Cadre Cinématographique Panoramique — Hauteur Maîtrisée */}
-        <div className="space-y-3">
-          <div
-            ref={containerRef}
-            className="relative w-full aspect-[16/9] md:aspect-[21/10] lg:aspect-[2.35/1] max-h-[520px] bg-[#050505] border border-[#262726] overflow-hidden group shadow-xl"
-          >
-            {/* Séquences d'images avec transition fluide */}
-            {t.sequences.map((seq, idx) => (
-              <div
-                key={seq.id}
-                className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-                  activeSequenceIndex === idx ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
-                }`}
-              >
-                <img
-                  src={SEQUENCE_IMAGES[idx] || SEQUENCE_IMAGES[0]}
-                  alt={seq.title}
-                  className={`w-full h-full object-cover transition-transform duration-[6000ms] ease-out ${
-                    isPlaying && activeSequenceIndex === idx ? 'scale-105' : 'scale-100'
-                  }`}
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-            ))}
+        {/* Lecteur Vidéo Brut au Format Vertical 9:16 Smartphone */}
+        <div className="flex flex-col items-center">
+          <div className="relative w-full max-w-[360px] sm:max-w-[400px] aspect-[9/16] bg-[#050505] border border-[#2a2b2a] shadow-2xl overflow-hidden group">
+            <video
+              ref={videoRef}
+              src={videoSrc}
+              poster={videoPosterChantier}
+              controls
+              playsInline
+              preload="metadata"
+              className="w-full h-full object-cover"
+              aria-label={t.title}
+            >
+              <source src="/videos/chantier_villa_lubumbashi.mp4" type="video/mp4" />
+              {language === 'FR'
+                ? 'Votre navigateur ne supporte pas la lecture de vidéos.'
+                : 'Your browser does not support the video tag.'}
+            </video>
+          </div>
 
-            {/* Voile sombre cinématographique subtil pour le contraste */}
-            <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/85 via-black/15 to-black/30 pointer-events-none" />
+          {/* Option discrète pour charger le fichier source original direct */}
+          <div className="mt-4 flex flex-col items-center gap-2">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="video/*,.mp4,.mov,.webm"
+              onChange={handleFileChange}
+              className="hidden"
+              id="raw-video-input"
+            />
 
-            {/* Bouton de lecture central sobre & mesuré */}
-            {!isPlaying && (
-              <div className="absolute inset-0 z-30 flex items-center justify-center p-4">
-                <button
-                  type="button"
-                  onClick={togglePlay}
-                  className="w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18 rounded-full border border-white/40 bg-black/45 backdrop-blur-md text-white hover:border-[#c7a97b] hover:bg-[#c7a97b] hover:text-black transition-all duration-300 flex items-center justify-center cursor-pointer shadow-xl group/play hover:scale-105"
-                  aria-label={t.playAria}
-                >
-                  <Play className="w-5 h-5 sm:w-6 sm:h-6 fill-current ml-0.5 transition-transform group-hover/play:scale-110" />
-                </button>
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="inline-flex items-center gap-1.5 text-[11px] font-label-technical uppercase tracking-wider text-[#747878] hover:text-[#c7a97b] transition-colors cursor-pointer py-1 px-3 border border-[#232423] hover:border-[#c7a97b]/50 bg-black/40"
+            >
+              <Upload className="w-3 h-3" />
+              <span>
+                {language === 'FR'
+                  ? 'Charger un autre fichier vidéo (.mp4)'
+                  : 'Load another video file (.mp4)'}
+              </span>
+            </button>
+
+            {uploadStatus && (
+              <div className="flex items-center gap-1.5 text-xs text-[#c7a97b] font-label-technical tracking-wider">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>{uploadStatus}</span>
               </div>
             )}
-
-            {/* Barre de contrôles inférieure discrète et élégante */}
-            <div className="absolute bottom-0 left-0 right-0 z-30 px-4 py-3 sm:px-6 sm:py-4 flex flex-col justify-end space-y-2.5">
-              {/* Titre de la séquence courante & Timecode */}
-              <div className="flex items-center justify-between text-xs font-label-technical tracking-wider text-white/90">
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <span className="text-[#c7a97b] font-bold">
-                    0{activeSequenceIndex + 1} &mdash; 0{t.sequences.length}
-                  </span>
-                  <span className="text-white/40">&bull;</span>
-                  <span className="text-white uppercase font-medium">
-                    {activeSequence.title}
-                  </span>
-                </div>
-                <div className="tabular-nums font-mono text-[11px] text-white/70">
-                  {formatTime(progress)} / {formatTime(TOTAL_DURATION)}
-                </div>
-              </div>
-
-              {/* Ligne de progression fine (4 repères architecturaux) */}
-              <div className="grid grid-cols-4 gap-1.5 pt-0.5">
-                {t.sequences.map((seq, idx) => {
-                  const isActive = activeSequenceIndex === idx;
-                  const isPast = activeSequenceIndex > idx;
-                  return (
-                    <button
-                      key={seq.id}
-                      type="button"
-                      onClick={() => handleSelectSequence(idx)}
-                      className="group/track relative h-[2px] bg-white/20 hover:bg-white/40 transition-colors cursor-pointer overflow-hidden"
-                      aria-label={seq.title}
-                    >
-                      <span
-                        className={`absolute inset-y-0 left-0 bg-[#c7a97b] transition-all duration-200 ${
-                          isPast ? 'w-full' : isActive ? 'w-full' : 'w-0'
-                        }`}
-                      />
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Boutons discrets Play/Pause, Mute et Plein écran */}
-              <div className="flex items-center justify-between pt-0.5">
-                <div className="flex items-center gap-4">
-                  <button
-                    type="button"
-                    onClick={togglePlay}
-                    className="text-white/80 hover:text-white transition-colors cursor-pointer p-0.5"
-                    aria-label={isPlaying ? 'Pause' : 'Play'}
-                  >
-                    {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-current" />}
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={toggleMute}
-                    className="text-white/80 hover:text-white transition-colors cursor-pointer p-0.5"
-                    aria-label={isMuted ? t.unmuteAria : t.muteAria}
-                  >
-                    {isMuted ? <VolumeX className="w-3.5 h-3.5 text-white/50" /> : <Volume2 className="w-3.5 h-3.5" />}
-                  </button>
-
-                  <span className="text-[10px] font-label-technical tracking-widest uppercase text-white/40 hidden sm:inline">
-                    {isPlaying ? t.activeStatus : t.pausedStatus}
-                  </span>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={toggleFullscreen}
-                  className="text-white/80 hover:text-white transition-colors cursor-pointer p-0.5"
-                  aria-label={t.fullscreenAria}
-                >
-                  <Maximize2 className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
           </div>
 
           {/* Légende Architecturale Inférieure */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 pt-2 text-[10px] sm:text-[11px] font-label-technical tracking-wider text-[#747878] uppercase border-t border-[#232423]">
-            <span>
-              {t.captionProject}
-            </span>
-            <span className="text-[#c7a97b]">
-              {t.captionMha}
-            </span>
+          <div className="w-full max-w-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 pt-6 mt-4 text-[10px] sm:text-[11px] font-label-technical tracking-wider text-[#747878] uppercase border-t border-[#232423]">
+            <span>{t.captionProject}</span>
+            <span className="text-[#c7a97b]">{t.captionMha}</span>
           </div>
         </div>
       </div>
     </section>
   );
 };
-
