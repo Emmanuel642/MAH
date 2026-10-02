@@ -1,25 +1,21 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
-import path from 'path';
-import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 
-const rootDir = fileURLToPath(new URL('.', import.meta.url));
-
-export default defineConfig(() => {
-  return {
-    plugins: [react(), tailwindcss()],
-    resolve: {
-      alias: {
-        '@': path.resolve(rootDir, '.'),
+// `base: './'` génère des URLs relatives : le build fonctionne tel quel
+// sur GitHub Pages (sous-dossier), Vercel, Netlify ou un domaine dédié.
+export default defineConfig({
+  base: './',
+  plugins: [react(), tailwindcss()],
+  build: {
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        // Cache-busting long terme pour les assets nommés par hash
+        assetFileNames: 'assets/[name]-[hash][extname]',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js',
       },
     },
-    server: {
-      // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modify—file watching is disabled to prevent flickering during agent edits.
-      hmr: process.env.DISABLE_HMR !== 'true',
-      // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
-      watch: process.env.DISABLE_HMR === 'true' ? null : {},
-    },
-  };
+  },
 });
