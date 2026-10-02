@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PROJECTS_DATA } from './data/projectsData';
 import { Language } from './types';
 import { HeaderNav } from './components/HeaderNav';
@@ -23,7 +23,20 @@ import { Footer } from './components/Footer';
 import { ProjectEstimatorModal } from './components/ProjectEstimatorModal';
 
 export default function App() {
-  const [language, setLanguage] = useState<Language>('FR');
+  const [language, setLanguage] = useState<Language>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('mha_language') || localStorage.getItem('mha_lang');
+      if (saved === 'EN' || saved === 'FR') return saved;
+    }
+    return 'FR';
+  });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('mha_language', language);
+      document.documentElement.lang = language.toLowerCase();
+    }
+  }, [language]);
   const [activeCity, setActiveCity] = useState<'Kinshasa' | 'Lubumbashi'>('Lubumbashi');
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [estimatorOpen, setEstimatorOpen] = useState(false);
@@ -47,6 +60,10 @@ export default function App() {
   };
 
   const handleNavigateSection = (sectionId: string) => {
+    if (sectionId === 'top') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
     const el = document.getElementById(sectionId);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
@@ -59,7 +76,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#faf9f6] text-[#1a1c1a] antialiased flex flex-col font-body-md text-body-md selection:bg-[#000000] selection:text-[#faf9f6] overflow-x-hidden">
-      {/* 01 — Navigation Bar : Calme, lisible, avec FR/EN discret */}
+      {/* 01 — Navigation Bar : Toujours visible, flottante avec FR/EN discret */}
       <HeaderNav
         language={language}
         onLanguageChange={setLanguage}
@@ -67,8 +84,8 @@ export default function App() {
         onNavigateSection={handleNavigateSection}
       />
 
-      {/* Main Flow : Rythme & Grands Espaces */}
-      <main className="flex-grow">
+      {/* Main Flow : Rythme & Grands Espaces avec compensation du header fixe */}
+      <main className="flex-grow pt-20">
         {/* 02 — Hero : Épuré, respirant, centré sur la photographie */}
         <HeroSection
           language={language}

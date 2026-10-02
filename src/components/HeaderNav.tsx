@@ -37,7 +37,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
   };
 
   return (
-    <header className="bg-[#faf9f6]/95 backdrop-blur-sm top-0 z-40 sticky border-b border-[#c4c7c7]/30 transition-colors">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-[#faf9f6]/92 backdrop-blur-md border-b border-[#c4c7c7]/30 transition-colors">
       <div className="flex justify-between items-center w-full px-5 md:px-8 lg:px-12 max-w-[1440px] mx-auto h-20">
         {/* Zone 1: Logo & Brand Identity */}
         <a
@@ -140,7 +140,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
 
       {/* Menu mobile élégant et facilement refermable */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-[#faf9f6] border-b border-[#c4c7c7]/40 px-5 md:px-8 py-6 space-y-6 animate-fadeIn">
+        <div className="lg:hidden bg-[#faf9f6]/98 backdrop-blur-md border-b border-[#c4c7c7]/40 px-5 md:px-8 py-6 space-y-6 animate-fadeIn max-h-[calc(100dvh-5rem)] overflow-y-auto">
           <nav className="flex flex-col space-y-2 font-label-technical text-label-technical tracking-widest uppercase">
             <a
               href="#projets"
@@ -171,6 +171,39 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
               {t.contact}
             </a>
           </nav>
+
+          {/* Sélecteur de langue dans le menu mobile */}
+          <div className="flex items-center justify-between py-3 border-t border-b border-[#c4c7c7]/30">
+            <span className="font-label-technical text-xs tracking-widest uppercase text-[#747878]">
+              {language === 'FR' ? 'Langue / Language' : 'Language / Langue'}
+            </span>
+            <div className="flex items-center space-x-2 font-label-technical text-xs uppercase tracking-wider">
+              <button
+                type="button"
+                onClick={() => onLanguageChange('FR')}
+                className={`py-1 px-3 border transition-colors cursor-pointer ${
+                  language === 'FR'
+                    ? 'bg-[#000000] text-white border-[#000000] font-bold'
+                    : 'text-[#444748] border-[#c4c7c7]/50 hover:border-[#000000]'
+                }`}
+                aria-label="Passer en français"
+              >
+                FR
+              </button>
+              <button
+                type="button"
+                onClick={() => onLanguageChange('EN')}
+                className={`py-1 px-3 border transition-colors cursor-pointer ${
+                  language === 'EN'
+                    ? 'bg-[#000000] text-white border-[#000000] font-bold'
+                    : 'text-[#444748] border-[#c4c7c7]/50 hover:border-[#000000]'
+                }`}
+                aria-label="Switch to English"
+              >
+                EN
+              </button>
+            </div>
+          </div>
 
           {/* CTA présent dans le tiroir mobile */}
           <div className="pt-2">

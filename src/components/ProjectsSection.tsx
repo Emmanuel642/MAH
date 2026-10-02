@@ -20,6 +20,13 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
 
   const categories: ProjectCategory[] = ['Tous', 'Résidentiel', 'Tertiaire', 'Génie civil'];
 
+  const categoryLabels: Record<string, string> = {
+    Tous: t.categories.all,
+    Résidentiel: t.categories.residential,
+    Tertiaire: t.categories.commercial,
+    'Génie civil': t.categories.civil,
+  };
+
   const filteredProjects = projects.filter((project) => {
     if (selectedCategory === 'Tous') return true;
     return project.category.includes(selectedCategory);
@@ -54,7 +61,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                     : 'bg-[#faf9f6] text-[#444748] border-[#c4c7c7]/40 hover:border-[#000000]'
                 }`}
               >
-                {cat === 'Tous' ? t.all : cat}
+                {categoryLabels[cat] || cat}
               </button>
             ))}
           </div>
@@ -67,7 +74,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
               key={project.id}
               tabIndex={0}
               role="button"
-              aria-label={`Découvrir le projet ${project.title}`}
+              aria-label={`${t.viewProjectAria} ${project.title}`}
               onClick={() => onSelectProject(project.id)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -94,7 +101,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                     {project.title}
                   </h3>
                   <p className="font-body-md text-sm text-[#747878]">
-                    {project.type.split('·')[0].trim()} · {project.city}
+                    {(language === 'EN' && project.typeEN ? project.typeEN : project.type).split('·')[0].trim()} · {project.city}
                   </p>
                 </div>
 

@@ -23,7 +23,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         {/* Left Column: Pure Tectonic Statement */}
         <div className="lg:col-span-6 flex flex-col justify-center space-y-8">
           <div className="space-y-4">
-            <span className="font-label-technical text-label-technical tracking-widest uppercase text-[#765935] font-bold block">
+            <span className="font-label-technical text-label-technical tracking-wider sm:tracking-widest uppercase text-[#765935] font-bold block break-words leading-relaxed">
               {t.tag}
             </span>
             <h1 className="font-display-xl text-[#000000] tracking-tight whitespace-pre-line text-balance">

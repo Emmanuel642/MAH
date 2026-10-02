@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2, VolumeX, Maximize2, ShieldCheck, MapPin, Eye, CheckCircle2 } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, Maximize2 } from 'lucide-react';
 import { Language } from '../types';
+import { TRANSLATIONS } from '../data/translations';
 import videoPosterChantier from '../assets/images/video_poster_chantier_1790686955515.jpg';
 import droneVillaKatanga from '../assets/images/drone_villa_katanga_1790686546337.jpg';
 import chantierVillaReel from '../assets/images/chantier_villa_reel_1790686529029.jpg';
@@ -11,156 +12,68 @@ interface VideoShowcaseSectionProps {
   onOpenEstimator?: () => void;
 }
 
-interface Chapter {
-  id: string;
-  timeSeconds: number;
-  timeDisplay: string;
-  titleFR: string;
-  titleEN: string;
-  descFR: string;
-  descEN: string;
-  poster: string;
-}
-
-const CHAPTERS: Chapter[] = [
-  {
-    id: 'facade',
-    timeSeconds: 0,
-    timeDisplay: '00:00',
-    titleFR: 'Porche & Façade Principale',
-    titleEN: 'Entrance Porch & Main Facade',
-    descFR: 'Marches monumentales suspendues, colonnes jumelées et enduit minéral blanc cassé',
-    descEN: 'Monumental suspended steps, twin columns, and mineral stucco facade',
-    poster: videoPosterChantier,
-  },
-  {
-    id: 'toiture',
-    timeSeconds: 10,
-    timeDisplay: '00:10',
-    titleFR: 'Toiture & Spots Encastrés',
-    titleEN: 'Hipped Roof & Recessed Spots',
-    descFR: 'Charpente haute pente en tuiles métalliques noires thermo-laquées et éclairage sous-face',
-    descEN: 'High-pitch dark metal tile roof with integrated soffit downlights',
-    poster: droneVillaKatanga,
-  },
-  {
-    id: 'cloture',
-    timeSeconds: 22,
-    timeDisplay: '00:22',
-    titleFR: 'Allée & Clôture Électrifiée',
-    titleEN: 'Side Alley & Security Fence',
-    descFR: 'Mur d’enceinte chaîné, appliques murales LED et dispositif d’électrification périmétrique',
-    descEN: 'Reinforced boundary wall with LED sconces and perimeter electric fence',
-    poster: chantierVillaReel,
-  },
-  {
-    id: 'portail',
-    timeSeconds: 32,
-    timeDisplay: '00:32',
-    titleFR: 'Portail Motorisé & Concession',
-    titleEN: 'Motorized Gate & Compound',
-    descFR: 'Portique d’entrée grande largeur avec portail coulissant en acier noir et cour en viabilisation',
-    descEN: 'Wide entry portal with heavy black steel sliding gate and serviced compound',
-    poster: parkingReelChantier,
-  },
+const SEQUENCE_IMAGES = [
+  videoPosterChantier,
+  droneVillaKatanga,
+  chantierVillaReel,
+  parkingReelChantier,
 ];
 
-export const VideoShowcaseSection: React.FC<VideoShowcaseSectionProps> = ({
-  language,
-  onOpenEstimator,
-}) => {
+export const VideoShowcaseSection: React.FC<VideoShowcaseSectionProps> = ({ language }) => {
+  const t = TRANSLATIONS[language].video;
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(45);
-  const [activeChapterIndex, setActiveChapterIndex] = useState(0);
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const [activeSequenceIndex, setActiveSequenceIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Simulated video playback timer if video fails or when playing
+  const SEQUENCE_DURATION = 6; // 6 seconds per sequence
+  const TOTAL_DURATION = t.sequences.length * SEQUENCE_DURATION; // 24s total loop
+
+  // Cinematic timer loop when playback is active
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let timer: NodeJS.Timeout;
     if (isPlaying) {
-      interval = setInterval(() => {
-        setCurrentTime((prev) => {
-          const next = prev + 1;
-          if (next >= duration) {
-            setIsPlaying(false);
+      timer = setInterval(() => {
+        setProgress((prev) => {
+          const next = prev + 0.1;
+          if (next >= TOTAL_DURATION) {
             return 0;
           }
-          // Update active chapter based on time
-          const chapterIdx = CHAPTERS.findIndex((c, i) => {
-            const nextTime = CHAPTERS[i + 1]?.timeSeconds ?? duration;
-            return next >= c.timeSeconds && next < nextTime;
-          });
-          if (chapterIdx !== -1) {
-            setActiveChapterIndex(chapterIdx);
+          const nextIndex = Math.floor(next / SEQUENCE_DURATION);
+          if (nextIndex !== activeSequenceIndex && nextIndex < t.sequences.length) {
+            setActiveSequenceIndex(nextIndex);
           }
           return next;
         });
-      }, 1000);
+      }, 100);
     }
-    return () => clearInterval(interval);
-  }, [isPlaying, duration]);
+    return () => clearInterval(timer);
+  }, [isPlaying, activeSequenceIndex, TOTAL_DURATION, t.sequences.length]);
 
   const togglePlay = () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-        setIsPlaying(false);
-      } else {
-        videoRef.current.play().catch(() => {
-          // If browser policy blocks auto-play with sound
-        });
-        setIsPlaying(true);
-      }
-    } else {
-      setIsPlaying(!isPlaying);
-    }
+    setIsPlaying((prev) => !prev);
   };
 
   const toggleMute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-    }
-    setIsMuted(!isMuted);
+    setIsMuted((prev) => !prev);
   };
 
-  const handleSelectChapter = (index: number) => {
-    setActiveChapterIndex(index);
-    const targetSeconds = CHAPTERS[index].timeSeconds;
-    setCurrentTime(targetSeconds);
-    if (videoRef.current) {
-      videoRef.current.currentTime = targetSeconds;
-    }
-  };
-
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = Number(e.target.value);
-    setCurrentTime(val);
-    if (videoRef.current) {
-      videoRef.current.currentTime = val;
-    }
-    const chapterIdx = CHAPTERS.findIndex((c, i) => {
-      const nextTime = CHAPTERS[i + 1]?.timeSeconds ?? duration;
-      return val >= c.timeSeconds && val < nextTime;
-    });
-    if (chapterIdx !== -1) {
-      setActiveChapterIndex(chapterIdx);
-    }
+  const handleSelectSequence = (index: number) => {
+    setActiveSequenceIndex(index);
+    setProgress(index * SEQUENCE_DURATION);
   };
 
   const toggleFullscreen = () => {
     if (!containerRef.current) return;
     if (!document.fullscreenElement) {
       containerRef.current.requestFullscreen().catch(() => {});
-      setIsFullscreen(true);
     } else {
       document.exitFullscreen().catch(() => {});
-      setIsFullscreen(false);
     }
   };
+
+  const activeSequence = t.sequences[activeSequenceIndex] || t.sequences[0];
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -168,270 +81,158 @@ export const VideoShowcaseSection: React.FC<VideoShowcaseSectionProps> = ({
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const activeChapter = CHAPTERS[activeChapterIndex] || CHAPTERS[0];
-
   return (
     <section
       id="video-chantier"
-      className="bg-[#111211] text-[#faf9f6] py-24 md:py-32 border-b border-[#2d2e2d] relative overflow-hidden"
+      className="bg-[#0d0e0d] text-[#faf9f6] py-16 md:py-24 border-b border-[#232423] relative overflow-hidden"
     >
-      {/* Background Architectural Grid Lines */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
-
-      <div className="max-w-[1440px] mx-auto px-5 md:px-8 lg:px-12 relative z-10">
-        {/* Section Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-12 border-b border-[#2d2e2d]">
-          <div className="max-w-3xl space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#232423] border border-[#383a38] text-[#c7a97b] font-label-technical text-[10px] uppercase tracking-widest">
-              <span className="w-2 h-2 rounded-full bg-[#c7a97b] animate-pulse" />
-              {language === 'FR' ? 'VIDÉO CHANTIER & VISITE IMMERSIVE' : 'ON-SITE VIDEO & IMMERSIVE TOUR'}
-            </div>
-            <h2 className="font-display-lg text-[32px] md:text-[46px] text-white tracking-tight leading-tight">
-              {language === 'FR'
-                ? 'La réalité de nos chantiers en vidéo.'
-                : 'The reality of our construction sites on video.'}
-            </h2>
-            <p className="font-body-lg text-[#a6a8a8] max-w-2xl leading-relaxed">
-              {language === 'FR'
-                ? 'Visite filmée sur le terrain d’une villa de prestige en cours de finition à Lubumbashi : de l’élévation à la toiture multi-pans, en passant par le portail motorisé et la clôture sécurisée.'
-                : 'On-site walkthrough video of a prestigious villa nearing completion in Lubumbashi: from structural elevations to the high-pitch hipped roof, motorized gate, and perimeter security.'}
-            </p>
-          </div>
-
-          <div className="flex items-center gap-4 text-xs font-label-technical tracking-wider text-[#a6a8a8]">
-            <div className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-[#c7a97b]" />
-              <span>LUBUMBASHI, RDC</span>
-            </div>
-            <span className="text-[#383a38]">|</span>
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-[#c7a97b]" />
-              <span>SUPERVISION MHA</span>
-            </div>
-          </div>
+      <div className="max-w-[1440px] mx-auto px-5 md:px-8 lg:px-12">
+        {/* En-tête Éditorial Harmonisé avec les sections adjacentes */}
+        <div className="max-w-3xl space-y-3 mb-8 md:mb-10">
+          <span className="font-label-technical text-label-technical tracking-widest uppercase text-[#c7a97b] font-bold block">
+            {t.tag}
+          </span>
+          <h2 className="font-display-lg text-[26px] sm:text-[34px] md:text-[40px] text-white tracking-tight leading-[1.15] text-balance">
+            {t.title}
+          </h2>
+          <p className="font-body-md text-[#9ea0a0] leading-relaxed max-w-2xl font-normal">
+            {t.desc}
+          </p>
         </div>
 
-        {/* Video Player & Chapters Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-10">
-          {/* Main Cinema Video Frame (Cols 8) */}
-          <div className="lg:col-span-8 flex flex-col space-y-4">
-            <div
-              ref={containerRef}
-              className="relative w-full aspect-video bg-[#000000] border border-[#2d2e2d] overflow-hidden group shadow-2xl"
-            >
-              {/* Fallback image / video poster based on active chapter or video */}
-              <img
-                src={activeChapter.poster}
-                alt="Vidéo de suivi de chantier MHA à Lubumbashi"
-                className={`w-full h-full object-cover transition-opacity duration-700 ${
-                  isPlaying ? 'opacity-90 scale-[1.02]' : 'opacity-85'
+        {/* Cadre Cinématographique Panoramique — Hauteur Maîtrisée */}
+        <div className="space-y-3">
+          <div
+            ref={containerRef}
+            className="relative w-full aspect-[16/9] md:aspect-[21/10] lg:aspect-[2.35/1] max-h-[520px] bg-[#050505] border border-[#262726] overflow-hidden group shadow-xl"
+          >
+            {/* Séquences d'images avec transition fluide */}
+            {t.sequences.map((seq, idx) => (
+              <div
+                key={seq.id}
+                className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                  activeSequenceIndex === idx ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
                 }`}
-                referrerPolicy="no-referrer"
-              />
-
-              {/* Video Overlay Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/30 pointer-events-none" />
-
-              {/* Status Pill on Top Left */}
-              <div className="absolute top-4 left-4 z-20 flex items-center gap-2 bg-black/60 backdrop-blur-md px-3 py-1.5 border border-white/10 font-label-technical text-[10px] tracking-widest uppercase text-white">
-                <span className={`w-2 h-2 rounded-full ${isPlaying ? 'bg-red-500 animate-pulse' : 'bg-white/40'}`} />
-                <span>{isPlaying ? 'LECTURE EN COURS' : 'PAUSE · SURVOL DU CHANTIER'}</span>
+              >
+                <img
+                  src={SEQUENCE_IMAGES[idx] || SEQUENCE_IMAGES[0]}
+                  alt={seq.title}
+                  className={`w-full h-full object-cover transition-transform duration-[6000ms] ease-out ${
+                    isPlaying && activeSequenceIndex === idx ? 'scale-105' : 'scale-100'
+                  }`}
+                  referrerPolicy="no-referrer"
+                />
               </div>
+            ))}
 
-              {/* Location Tag Top Right */}
-              <div className="absolute top-4 right-4 z-20 hidden sm:flex items-center gap-2 bg-black/60 backdrop-blur-md px-3 py-1.5 border border-white/10 font-label-technical text-[10px] tracking-widest text-white/80">
-                <span>4K ULTRA HD · SONORE STEREO</span>
-              </div>
+            {/* Voile sombre cinématographique subtil pour le contraste */}
+            <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/85 via-black/15 to-black/30 pointer-events-none" />
 
-              {/* Big Center Play Button when paused */}
-              {!isPlaying && (
+            {/* Bouton de lecture central sobre & mesuré */}
+            {!isPlaying && (
+              <div className="absolute inset-0 z-30 flex items-center justify-center p-4">
                 <button
+                  type="button"
                   onClick={togglePlay}
-                  className="absolute inset-0 m-auto w-20 h-20 rounded-full bg-white/95 text-black hover:bg-white hover:scale-105 transition-all duration-300 flex items-center justify-center shadow-2xl z-20 cursor-pointer"
-                  aria-label="Lancer la vidéo"
+                  className="w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18 rounded-full border border-white/40 bg-black/45 backdrop-blur-md text-white hover:border-[#c7a97b] hover:bg-[#c7a97b] hover:text-black transition-all duration-300 flex items-center justify-center cursor-pointer shadow-xl group/play hover:scale-105"
+                  aria-label={t.playAria}
                 >
-                  <Play className="w-8 h-8 fill-black ml-1" />
+                  <Play className="w-5 h-5 sm:w-6 sm:h-6 fill-current ml-0.5 transition-transform group-hover/play:scale-110" />
                 </button>
-              )}
+              </div>
+            )}
 
-              {/* Bottom Control Bar */}
-              <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 z-20 bg-gradient-to-t from-black/95 to-transparent">
-                {/* Active Chapter Label */}
-                <div className="flex items-center justify-between text-xs text-white/80 pb-2 font-label-technical tracking-wider">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[#c7a97b] font-bold">
-                      {language === 'FR' ? activeChapter.titleFR : activeChapter.titleEN}
-                    </span>
-                    <span className="text-white/40 hidden sm:inline">—</span>
-                    <span className="text-white/60 hidden sm:inline text-[11px]">
-                      {language === 'FR' ? activeChapter.descFR : activeChapter.descEN}
-                    </span>
-                  </div>
-                  <div className="tabular-nums font-mono text-[11px] text-white/80">
-                    {formatTime(currentTime)} / {formatTime(duration)}
-                  </div>
+            {/* Barre de contrôles inférieure discrète et élégante */}
+            <div className="absolute bottom-0 left-0 right-0 z-30 px-4 py-3 sm:px-6 sm:py-4 flex flex-col justify-end space-y-2.5">
+              {/* Titre de la séquence courante & Timecode */}
+              <div className="flex items-center justify-between text-xs font-label-technical tracking-wider text-white/90">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <span className="text-[#c7a97b] font-bold">
+                    0{activeSequenceIndex + 1} &mdash; 0{t.sequences.length}
+                  </span>
+                  <span className="text-white/40">&bull;</span>
+                  <span className="text-white uppercase font-medium">
+                    {activeSequence.title}
+                  </span>
                 </div>
-
-                {/* Progress / Seek Slider */}
-                <div className="relative py-2">
-                  <input
-                    type="range"
-                    min="0"
-                    max={duration}
-                    value={currentTime}
-                    onChange={handleSeek}
-                    className="w-full h-1 bg-white/20 rounded-none appearance-none cursor-pointer accent-[#c7a97b] focus:outline-none"
-                  />
-                  {/* Chapter tick marks on the progress bar */}
-                  <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between pointer-events-none px-1">
-                    {CHAPTERS.map((c) => (
-                      <span
-                        key={c.id}
-                        className="w-1.5 h-1.5 bg-white/50 rounded-full"
-                        style={{ left: `${(c.timeSeconds / duration) * 100}%` }}
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                {/* Actions: Play/Pause, Mute, Fullscreen */}
-                <div className="flex items-center justify-between pt-1">
-                  <div className="flex items-center gap-4">
-                    <button
-                      onClick={togglePlay}
-                      className="text-white hover:text-[#c7a97b] transition-colors p-1"
-                      aria-label={isPlaying ? 'Pause' : 'Play'}
-                    >
-                      {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 fill-white" />}
-                    </button>
-
-                    <button
-                      onClick={toggleMute}
-                      className="text-white hover:text-[#c7a97b] transition-colors p-1"
-                      aria-label={isMuted ? 'Activer le son' : 'Couper le son'}
-                    >
-                      {isMuted ? <VolumeX className="w-5 h-5 text-white/60" /> : <Volume2 className="w-5 h-5" />}
-                    </button>
-
-                    <span className="font-label-technical text-[10px] tracking-widest uppercase text-white/50 hidden sm:inline">
-                      {isMuted ? 'Audio désactivé' : 'Audio actif'}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <button
-                      onClick={toggleFullscreen}
-                      className="text-white hover:text-[#c7a97b] transition-colors p-1"
-                      aria-label="Plein écran"
-                    >
-                      <Maximize2 className="w-4 h-4" />
-                    </button>
-                  </div>
+                <div className="tabular-nums font-mono text-[11px] text-white/70">
+                  {formatTime(progress)} / {formatTime(TOTAL_DURATION)}
                 </div>
               </div>
-            </div>
 
-            {/* Video Meta Info Footer */}
-            <div className="p-4 bg-[#181918] border border-[#2d2e2d] flex flex-wrap items-center justify-between gap-4 text-xs">
-              <div className="flex items-center gap-3">
-                <span className="font-label-technical uppercase tracking-widest text-[#c7a97b] font-bold">
-                  {language === 'FR' ? 'CHANTIER PILOTE :' : 'PILOT SITE :'}
-                </span>
-                <span className="text-[#e2e4e4]">
-                  {language === 'FR'
-                    ? 'Villa Contemporaine & Enceinte Sécurisée (Commune Annexe, Lubumbashi)'
-                    : 'Contemporary Villa & Secure Compound (Commune Annexe, Lubumbashi)'}
-                </span>
-              </div>
-              <div className="flex items-center gap-2 text-[#a6a8a8] font-label-technical text-[11px]">
-                <CheckCircle2 className="w-3.5 h-3.5 text-[#c7a97b]" />
-                <span>{language === 'FR' ? 'Vidéo hebdomadaire transmise au client' : 'Weekly site videos sent to clients'}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Chapter Selector & Technical Details (Cols 4) */}
-          <div className="lg:col-span-4 flex flex-col justify-between space-y-6">
-            <div className="space-y-3">
-              <div className="flex items-center justify-between pb-2 border-b border-[#2d2e2d]">
-                <span className="font-label-technical text-[11px] uppercase tracking-widest text-[#c7a97b] font-bold">
-                  {language === 'FR' ? 'SÉQUENCES DE LA VISITE' : 'TOUR SEQUENCES'}
-                </span>
-                <span className="font-label-technical text-[10px] text-white/50">
-                  {CHAPTERS.length} {language === 'FR' ? 'CHAPITRES' : 'CHAPTERS'}
-                </span>
-              </div>
-
-              {/* Chapters List */}
-              <div className="space-y-2">
-                {CHAPTERS.map((chap, idx) => {
-                  const isCurrent = activeChapterIndex === idx;
+              {/* Ligne de progression fine (4 repères architecturaux) */}
+              <div className="grid grid-cols-4 gap-1.5 pt-0.5">
+                {t.sequences.map((seq, idx) => {
+                  const isActive = activeSequenceIndex === idx;
+                  const isPast = activeSequenceIndex > idx;
                   return (
                     <button
-                      key={chap.id}
-                      onClick={() => handleSelectChapter(idx)}
-                      className={`w-full text-left p-3.5 border transition-all duration-200 cursor-pointer flex items-start gap-3 ${
-                        isCurrent
-                          ? 'bg-[#232423] border-[#c7a97b] text-white'
-                          : 'bg-[#181918] border-[#2d2e2d] text-white/70 hover:border-white/30 hover:bg-[#1e1f1e]'
-                      }`}
+                      key={seq.id}
+                      type="button"
+                      onClick={() => handleSelectSequence(idx)}
+                      className="group/track relative h-[2px] bg-white/20 hover:bg-white/40 transition-colors cursor-pointer overflow-hidden"
+                      aria-label={seq.title}
                     >
-                      <div className="relative w-16 h-12 flex-shrink-0 bg-black overflow-hidden border border-white/10">
-                        <img
-                          src={chap.poster}
-                          alt={chap.titleFR}
-                          className="w-full h-full object-cover"
-                          referrerPolicy="no-referrer"
-                        />
-                        <span className="absolute bottom-0.5 right-0.5 bg-black/80 px-1 py-0.2 text-[9px] font-mono text-white/90">
-                          {chap.timeDisplay}
-                        </span>
-                      </div>
-
-                      <div className="flex-1 min-w-0 space-y-1">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-headline-sm text-[13px] font-medium text-white truncate">
-                            {language === 'FR' ? chap.titleFR : chap.titleEN}
-                          </h4>
-                          {isCurrent && (
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#c7a97b]" />
-                          )}
-                        </div>
-                        <p className="text-[11px] text-[#a6a8a8] line-clamp-2 leading-relaxed font-body-sm">
-                          {language === 'FR' ? chap.descFR : chap.descEN}
-                        </p>
-                      </div>
+                      <span
+                        className={`absolute inset-y-0 left-0 bg-[#c7a97b] transition-all duration-200 ${
+                          isPast ? 'w-full' : isActive ? 'w-full' : 'w-0'
+                        }`}
+                      />
                     </button>
                   );
                 })}
               </div>
-            </div>
 
-            {/* Client Transparency Card */}
-            <div className="p-5 bg-[#181918] border border-[#2d2e2d] space-y-3">
-              <div className="flex items-center gap-2 text-[#c7a97b]">
-                <Eye className="w-4 h-4" />
-                <h5 className="font-label-technical text-[11px] uppercase tracking-widest font-bold">
-                  {language === 'FR' ? 'TRANSPARENCE TOTALE DU CHANTIER' : 'FULL SITE TRANSPARENCY'}
-                </h5>
-              </div>
-              <p className="font-body-sm text-[12px] text-[#a6a8a8] leading-relaxed">
-                {language === 'FR'
-                  ? 'Que vous résidiez à Lubumbashi, Kinshasa, en province ou dans la diaspora, nos ingénieurs produisent des reportages vidéo réguliers pour vous permettre de vivre l’avancée de votre bâtisse pas à pas.'
-                  : 'Whether you live in Lubumbashi, Kinshasa, or abroad in the diaspora, our engineers provide regular drone and walkthrough videos so you can track your project progress seamlessly.'}
-              </p>
-              {onOpenEstimator && (
+              {/* Boutons discrets Play/Pause, Mute et Plein écran */}
+              <div className="flex items-center justify-between pt-0.5">
+                <div className="flex items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={togglePlay}
+                    className="text-white/80 hover:text-white transition-colors cursor-pointer p-0.5"
+                    aria-label={isPlaying ? 'Pause' : 'Play'}
+                  >
+                    {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-current" />}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={toggleMute}
+                    className="text-white/80 hover:text-white transition-colors cursor-pointer p-0.5"
+                    aria-label={isMuted ? t.unmuteAria : t.muteAria}
+                  >
+                    {isMuted ? <VolumeX className="w-3.5 h-3.5 text-white/50" /> : <Volume2 className="w-3.5 h-3.5" />}
+                  </button>
+
+                  <span className="text-[10px] font-label-technical tracking-widest uppercase text-white/40 hidden sm:inline">
+                    {isPlaying ? t.activeStatus : t.pausedStatus}
+                  </span>
+                </div>
+
                 <button
-                  onClick={onOpenEstimator}
-                  className="w-full mt-2 py-3 px-4 bg-white text-black font-label-technical text-[10px] uppercase tracking-widest font-bold hover:bg-[#c7a97b] hover:text-white transition-colors cursor-pointer text-center"
+                  type="button"
+                  onClick={toggleFullscreen}
+                  className="text-white/80 hover:text-white transition-colors cursor-pointer p-0.5"
+                  aria-label={t.fullscreenAria}
                 >
-                  {language === 'FR' ? 'Lancer une étude de projet' : 'Start a project study'}
+                  <Maximize2 className="w-3.5 h-3.5" />
                 </button>
-              )}
+              </div>
             </div>
+          </div>
+
+          {/* Légende Architecturale Inférieure */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 pt-2 text-[10px] sm:text-[11px] font-label-technical tracking-wider text-[#747878] uppercase border-t border-[#232423]">
+            <span>
+              {t.captionProject}
+            </span>
+            <span className="text-[#c7a97b]">
+              {t.captionMha}
+            </span>
           </div>
         </div>
       </div>
     </section>
   );
 };
+

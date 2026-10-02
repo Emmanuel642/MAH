@@ -18,18 +18,25 @@ export interface Project {
   code: string;
   title: string;
   tagline: string;
+  taglineEN?: string;
   type: string;
+  typeEN?: string;
   category: ('Architecture' | 'Génie civil' | 'Construction' | 'Résidentiel' | 'Tertiaire')[];
   city: 'Kinshasa' | 'Lubumbashi' | 'Kolwezi' | 'Matadi';
   location: string;
+  locationEN?: string;
   year: string;
   surface: string;
   height: string;
+  heightEN?: string;
   image: string;
   gallery?: string[];
   description: string;
+  descriptionEN?: string;
   fullNarrative: string;
+  fullNarrativeEN?: string;
   specs: ProjectSpec;
+  specsEN?: ProjectSpec;
 }
 
 export interface EstimateFormData {

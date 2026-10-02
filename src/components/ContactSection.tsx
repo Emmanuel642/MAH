@@ -53,18 +53,12 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
       const data = await response.json().catch(() => ({}));
 
       if (!response.ok || !data.success) {
-        throw new Error(
-          data.error ||
-            "Impossible d'envoyer votre demande pour le moment. Veuillez réessayer dans quelques instants."
-        );
+        throw new Error(data.error || t.form.error);
       }
 
       setSubmitted(true);
     } catch (err: any) {
-      setErrorMessage(
-        err?.message ||
-          "Impossible d'envoyer votre demande pour le moment. Veuillez réessayer dans quelques instants."
-      );
+      setErrorMessage(err?.message || t.form.error);
     } finally {
       setLoading(false);
     }
@@ -73,11 +67,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   const offices = [
     {
       cityKey: 'Lubumbashi' as const,
-      name: 'LUBUMBASHI — KATANGA (SIÈGE SOCIAL)',
+      name: t.officeNames.lubumbashi,
       address: 'Bloc II, Bâtiment LUANO CITY, Route Aéroport, Commune Annexe, Lubumbashi Ville',
       phones: ['+243 991 999 901', '+243 850 001 001'],
       email: 'contact@mha-rdc.com',
-      hours: 'Lundi — Vendredi : 08h30 - 17h00',
+      hours: t.officeHours.lubumbashi,
       coordinates: "11°40'S 27°29'E",
       cadastreRef: 'CD-HK-LSH-2026/115',
       nrc: '8458',
@@ -85,11 +79,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
     },
     {
       cityKey: 'Kinshasa' as const,
-      name: 'KINSHASA — GOMBE (ANTENNE CAPITALE)',
+      name: t.officeNames.kinshasa,
       address: '42 Boulevard du 30 Juin, Gombe, Kinshasa',
       phones: ['+243 991 999 901', '+243 850 001 001'],
       email: 'contact@mha-rdc.com',
-      hours: 'Lundi — Vendredi : 08h30 - 17h30',
+      hours: t.officeHours.kinshasa,
       coordinates: "04°19'S 15°18'E",
       cadastreRef: 'CD-KIN-GMB-2026/042',
       nrc: '8458',
@@ -139,7 +133,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             <div className="space-y-6 pt-2 font-body-md text-[#444748]">
               <div>
                 <span className="font-label-technical text-[10px] text-[#765935] tracking-widest uppercase font-bold block mb-1">
-                  Adresse & Implantation
+                  {t.labels.address}
                 </span>
                 <p className="text-[#000000] font-medium leading-snug">{currentOffice.address}</p>
                 <p className="text-sm text-[#747878] mt-0.5">{currentOffice.name}</p>
@@ -147,7 +141,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
 
               <div>
                 <span className="font-label-technical text-[10px] text-[#765935] tracking-widest uppercase font-bold block mb-1">
-                  Téléphones
+                  {t.labels.phone}
                 </span>
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                   {currentOffice.phones.map((phone, idx) => (
@@ -168,7 +162,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
 
               <div>
                 <span className="font-label-technical text-[10px] text-[#765935] tracking-widest uppercase font-bold block mb-1">
-                  E-mail
+                  {t.labels.email}
                 </span>
                 <a
                   href={`mailto:${currentOffice.email}`}
@@ -180,7 +174,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
 
               <div>
                 <span className="font-label-technical text-[10px] text-[#765935] tracking-widest uppercase font-bold block mb-1">
-                  Permanence technique
+                  {t.labels.hours}
                 </span>
                 <p className="text-sm">{currentOffice.hours}</p>
               </div>
@@ -203,7 +197,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
               <div className="space-y-6 py-12 text-center">
                 <CheckCircle2 className="w-12 h-12 text-[#765935] mx-auto" />
                 <h3 className="font-headline-lg text-2xl text-[#000000]">
-                  Demande transmise avec succès
+                  {t.form.successTitle}
                 </h3>
                 <p className="font-body-md text-[#444748] max-w-md mx-auto">
                   {t.form.success}
@@ -224,14 +218,14 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   }}
                   className="inline-flex items-center gap-2 bg-[#000000] text-white font-label-technical text-label-technical tracking-widest uppercase px-8 py-3.5 hover:bg-[#765935] transition-colors cursor-pointer"
                 >
-                  <span>Nouvelle demande</span>
+                  <span>{t.form.newInquiry}</span>
                 </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-8">
                 {/* Honeypot antispam invisible pour les utilisateurs normaux (protégé contre l'autofill) */}
                 <div className="hidden" aria-hidden="true" style={{ display: 'none', position: 'absolute', opacity: 0, pointerEvents: 'none' }}>
-                  <label htmlFor="company_website">Ne pas remplir ce champ</label>
+                  <label htmlFor="company_website">Do not fill this</label>
                   <input
                     id="company_website"
                     name="company_website"
@@ -271,7 +265,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                     disabled={loading}
                     value={formState.name}
                     onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                    placeholder="Votre nom"
+                    placeholder={t.form.namePlaceholder}
                     className="w-full bg-[#faf9f6] border-0 border-b border-[#000000] px-0 py-3 text-[#000000] placeholder:text-[#c4c7c7] focus:ring-0 focus:border-[#765935] focus:outline-none transition-colors font-body-md disabled:opacity-60"
                   />
                 </div>
@@ -292,7 +286,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                       disabled={loading}
                       value={formState.email}
                       onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-                      placeholder="votre@email.com"
+                      placeholder={t.form.emailPlaceholder}
                       className="w-full bg-[#faf9f6] border-0 border-b border-[#000000] px-0 py-3 text-[#000000] placeholder:text-[#c4c7c7] focus:ring-0 focus:border-[#765935] focus:outline-none transition-colors font-body-md disabled:opacity-60"
                     />
                   </div>
@@ -311,7 +305,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                       disabled={loading}
                       value={formState.phone}
                       onChange={(e) => setFormState({ ...formState, phone: e.target.value })}
-                      placeholder="+243 ..."
+                      placeholder={t.form.phonePlaceholder}
                       className="w-full bg-[#faf9f6] border-0 border-b border-[#000000] px-0 py-3 text-[#000000] placeholder:text-[#c4c7c7] focus:ring-0 focus:border-[#765935] focus:outline-none transition-colors font-body-md disabled:opacity-60"
                     />
                   </div>
@@ -336,11 +330,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                     <option value="" disabled>
                       {t.form.typeDefault}
                     </option>
-                    <option value="Architecture">Architecture</option>
-                    <option value="Construction">Construction</option>
-                    <option value="Génie civil">Génie civil</option>
-                    <option value="Conseil">Conseil & Maîtrise d'œuvre</option>
-                    <option value="Autre">Autre programme</option>
+                    {t.form.types.map((typeObj) => (
+                      <option key={typeObj.value} value={typeObj.value}>
+                        {typeObj.label}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -359,7 +353,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                     disabled={loading}
                     value={formState.message}
                     onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-                    placeholder="Décrivez brièvement votre projet..."
+                    placeholder={t.form.messagePlaceholder}
                     className="w-full bg-[#faf9f6] border-0 border-b border-[#000000] px-0 py-3 text-[#000000] placeholder:text-[#c4c7c7] focus:ring-0 focus:border-[#765935] focus:outline-none transition-colors font-body-md resize-none disabled:opacity-60"
                   />
                 </div>
@@ -374,7 +368,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                     {loading ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Envoi en cours...</span>
+                        <span>{t.form.submitting}</span>
                       </>
                     ) : (
                       <>

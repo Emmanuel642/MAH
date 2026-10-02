@@ -26,21 +26,28 @@ export const ProjectEstimatorModal: React.FC<ProjectEstimatorModalProps> = ({
   onClose,
   onSubmitEstimate,
 }) => {
+  const t = TRANSLATIONS[language].estimator;
+
   const [step, setStep] = useState<1 | 2 | 3>(1);
-  const [programType, setProgramType] = useState(initialProgram || 'Résidence de maître');
+  const [programType, setProgramType] = useState(initialProgram || t.programs[0].title);
   const [city, setCity] = useState('Kinshasa');
   const [surface, setSurface] = useState(850);
   const [phases, setPhases] = useState<string[]>([
-    'Études architecturales & esquisse',
-    'Ingénierie & calculs structurels',
-    'Direction & suivi d’exécution',
+    t.missions[0],
+    t.missions[1],
+    t.missions[2],
   ]);
   const [clientName, setClientName] = useState('');
   const [clientEmail, setClientEmail] = useState('');
   const [clientPhone, setClientPhone] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
-  const t = TRANSLATIONS[language].estimator;
+  // Sync initial program if changed
+  useEffect(() => {
+    if (initialProgram) {
+      setProgramType(initialProgram);
+    }
+  }, [initialProgram]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -82,14 +89,7 @@ export const ProjectEstimatorModal: React.FC<ProjectEstimatorModalProps> = ({
     });
   };
 
-  const programOptions = [
-    { title: 'Résidence de maître', desc: 'Villa contemporaine, pavillon privé ou domaine' },
-    { title: 'Siège corporatif & Bureaux', desc: 'Immeuble tertiaire, espaces de direction' },
-    { title: 'Complexe résidentiel collectif', desc: 'Appartements de standing, résidences sécurisées' },
-    { title: 'Bâtiment industriel & Logistique', desc: 'Hangars, entrepôts grande portée, plateformes' },
-    { title: 'Équipement institutionnel', desc: 'Cliniques, centres culturels, chancelleries' },
-    { title: 'Rénovation lourde & Extension', desc: 'Réhabilitation patrimoniale et structurelle' },
-  ];
+  const programOptions = t.programs;
 
   return (
     <div
@@ -132,25 +132,25 @@ export const ProjectEstimatorModal: React.FC<ProjectEstimatorModalProps> = ({
                 {t.successTitle}
               </h3>
               <p className="font-body-md text-[#444748] max-w-xl mx-auto">
-                {t.successSub} ({city} — {programType}, ~{surface} m²).
+                {t.successSub} ({city} — {programType}, ~{surface} {t.surfaceUnit}).
               </p>
 
               {/* Summary Card */}
               <div className="bg-[#f4f3f1] border border-[#c4c7c7]/50 p-6 max-w-lg mx-auto text-left font-body-sm text-[#444748] space-y-2.5">
                 <div className="flex justify-between font-label-technical text-label-technical text-[#000000] uppercase border-b border-[#c4c7c7]/40 pb-2">
-                  <span>Programme</span>
+                  <span>{t.summary.program}</span>
                   <span className="font-bold">{programType}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Implantation</span>
+                  <span>{t.summary.location}</span>
                   <span className="font-medium text-[#000000]">{city}, RDC</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Superficie indicative</span>
-                  <span className="font-medium text-[#000000]">{surface} m²</span>
+                  <span>{t.summary.surface}</span>
+                  <span className="font-medium text-[#000000]">{surface} {t.surfaceUnit}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Contact</span>
+                  <span>{t.summary.contact}</span>
                   <span className="font-medium text-[#000000]">{clientName}</span>
                 </div>
               </div>
@@ -158,7 +158,7 @@ export const ProjectEstimatorModal: React.FC<ProjectEstimatorModalProps> = ({
               <div className="pt-4 flex justify-center">
                 <button
                   onClick={onClose}
-                  className="bg-[#000000] text-white px-8 py-3.5 font-label-technical text-label-technical uppercase tracking-widest hover:bg-[#765935] transition-colors"
+                  className="bg-[#000000] text-white px-8 py-3.5 font-label-technical text-label-technical uppercase tracking-widest hover:bg-[#765935] transition-colors cursor-pointer"
                 >
                   {t.returnBtn}
                 </button>
@@ -231,11 +231,11 @@ export const ProjectEstimatorModal: React.FC<ProjectEstimatorModalProps> = ({
                       onChange={(e) => setCity(e.target.value)}
                       className="w-full bg-[#faf9f6] border border-[#000000] px-4 py-3 font-body-md text-[#000000] focus:ring-0 focus:border-[#765935]"
                     >
-                      <option value="Kinshasa">Kinshasa (Gombe, Ngaliema, Limete, Nsele...)</option>
-                      <option value="Lubumbashi">Lubumbashi (Centre-ville, Golf, Bel-Air...)</option>
-                      <option value="Kolwezi">Kolwezi (Lualaba)</option>
-                      <option value="Matadi">Matadi / Boma (Kongo Central)</option>
-                      <option value="Autre région RDC">Autre région en RDC</option>
+                      {t.cities.map((c) => (
+                        <option key={c.value} value={c.value}>
+                          {c.label}
+                        </option>
+                      ))}
                     </select>
                   </div>
 
@@ -243,7 +243,7 @@ export const ProjectEstimatorModal: React.FC<ProjectEstimatorModalProps> = ({
                     <button
                       type="button"
                       onClick={() => setStep(2)}
-                      className="inline-flex items-center gap-2 bg-[#000000] text-white px-8 py-3.5 font-label-technical text-label-technical uppercase tracking-widest hover:bg-[#765935] transition-colors cursor-pointer"
+                      className="inline-flex items-center gap-2 bg-[#000000] text-white px-8 py-3.5 font-label-technical text-label-technical tracking-widest hover:bg-[#765935] transition-colors cursor-pointer"
                     >
                       <span>{t.nextStep}</span>
                       <ArrowRight className="w-4 h-4" />
@@ -284,9 +284,9 @@ export const ProjectEstimatorModal: React.FC<ProjectEstimatorModalProps> = ({
                       className="w-full accent-[#000000] cursor-pointer"
                     />
                     <div className="flex justify-between font-label-technical text-[10px] text-[#747878] uppercase">
-                      <span>150 m²</span>
-                      <span>2 000 m²</span>
-                      <span>8 000 m²</span>
+                      <span>150 {t.surfaceUnit}</span>
+                      <span>2 000 {t.surfaceUnit}</span>
+                      <span>8 000 {t.surfaceUnit}</span>
                     </div>
                   </div>
 
@@ -296,14 +296,7 @@ export const ProjectEstimatorModal: React.FC<ProjectEstimatorModalProps> = ({
                       {t.missionsLabel}
                     </span>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {[
-                        'Études architecturales & esquisse',
-                        'Dossier de permis de bâtir',
-                        'Ingénierie & calculs structurels',
-                        'Direction & suivi d’exécution',
-                        'Construction tout corps d’état',
-                        'Conseil & Maîtrise d’ouvrage déléguée',
-                      ].map((item) => {
+                      {t.missions.map((item) => {
                         const active = phases.includes(item);
                         return (
                           <div
@@ -365,21 +358,21 @@ export const ProjectEstimatorModal: React.FC<ProjectEstimatorModalProps> = ({
                   <div className="p-4 bg-[#f4f3f1] border border-[#c4c7c7]/60 flex flex-wrap justify-between items-center gap-2 font-label-technical text-label-technical uppercase">
                     <span>{programType}</span>
                     <span className="text-[#765935]">{city}</span>
-                    <span>{surface} m²</span>
-                    <span className="text-[#747878]">{phases.length} prestations</span>
+                    <span>{surface} {t.surfaceUnit}</span>
+                    <span className="text-[#747878]">{phases.length} {t.summary.phasesCount}</span>
                   </div>
 
                   <div className="space-y-4">
                     <div>
                       <label className="font-label-technical text-label-technical uppercase tracking-widest text-[#747878] block mb-1">
-                        Nom et Prénom (ou Société) *
+                        {t.fields.nameLabel}
                       </label>
                       <input
                         required
                         type="text"
                         value={clientName}
                         onChange={(e) => setClientName(e.target.value)}
-                        placeholder="Votre nom"
+                        placeholder={t.fields.namePlaceholder}
                         className="w-full bg-[#faf9f6] border-0 border-b border-[#000000] py-2 px-0 focus:ring-0 focus:border-[#765935] font-body-md"
                       />
                     </div>
@@ -387,27 +380,27 @@ export const ProjectEstimatorModal: React.FC<ProjectEstimatorModalProps> = ({
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label className="font-label-technical text-label-technical uppercase tracking-widest text-[#747878] block mb-1">
-                          Adresse E-mail *
+                          {t.fields.emailLabel}
                         </label>
                         <input
                           required
                           type="email"
                           value={clientEmail}
                           onChange={(e) => setClientEmail(e.target.value)}
-                          placeholder="votre@email.com"
+                          placeholder={t.fields.emailPlaceholder}
                           className="w-full bg-[#faf9f6] border-0 border-b border-[#000000] py-2 px-0 focus:ring-0 focus:border-[#765935] font-body-md"
                         />
                       </div>
                       <div>
                         <label className="font-label-technical text-label-technical uppercase tracking-widest text-[#747878] block mb-1">
-                          Numéro de Téléphone *
+                          {t.fields.phoneLabel}
                         </label>
                         <input
                           required
                           type="tel"
                           value={clientPhone}
                           onChange={(e) => setClientPhone(e.target.value)}
-                          placeholder="+243 ..."
+                          placeholder={t.fields.phonePlaceholder}
                           className="w-full bg-[#faf9f6] border-0 border-b border-[#000000] py-2 px-0 focus:ring-0 focus:border-[#765935] font-body-md"
                         />
                       </div>

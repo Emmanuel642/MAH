@@ -64,6 +64,15 @@
   outline-offset: 2px;
 }
 
+/* Offset for fixed architectural header so anchors are never obscured */
+html {
+  scroll-padding-top: 5rem;
+}
+
+[id] {
+  scroll-margin-top: 5rem;
+}
+
 /* Custom architectural utility classes */
 .font-label-technical {
   font-family: var(--font-technical);

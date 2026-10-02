@@ -37,6 +37,12 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
 
   if (!project) return null;
 
+  const isEn = language === 'EN';
+  const activeType = isEn && project.typeEN ? project.typeEN : project.type;
+  const activeDesc = isEn && project.descriptionEN ? project.descriptionEN : project.description;
+  const activeSpecs = isEn && project.specsEN ? project.specsEN : project.specs;
+  const activeLocation = isEn && project.locationEN ? project.locationEN : project.location;
+
   return (
     <div
       role="dialog"
@@ -75,7 +81,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
 
           <div className="space-y-2">
             <div className="font-label-technical text-label-technical uppercase tracking-widest text-[#765935]">
-              {project.type} · {project.location}
+              {activeType} · {activeLocation}
             </div>
             <h2 id="modal-project-title" className="font-display-lg text-3xl md:text-4xl text-[#000000] tracking-tight">
               {project.title}
@@ -84,7 +90,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
 
           {/* Level 2: Short Narrative */}
           <div className="space-y-4 font-body-lg text-body-lg text-[#444748] leading-relaxed">
-            <p>{project.description}</p>
+            <p>{activeDesc}</p>
           </div>
 
           {/* Level 3: Progressive Disclosure for Technical Details */}
@@ -108,25 +114,25 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                     <span className="font-label-technical text-[10px] text-[#747878] uppercase block mb-1">
                       {t.surface}
                     </span>
-                    <span className="font-medium text-[#000000]">{project.specs.superficie}</span>
+                    <span className="font-medium text-[#000000]">{activeSpecs.superficie}</span>
                   </div>
                   <div>
                     <span className="font-label-technical text-[10px] text-[#747878] uppercase block mb-1">
                       {t.height}
                     </span>
-                    <span className="font-medium text-[#000000]">{project.specs.hauteur}</span>
+                    <span className="font-medium text-[#000000]">{activeSpecs.hauteur}</span>
                   </div>
                   <div>
                     <span className="font-label-technical text-[10px] text-[#747878] uppercase block mb-1">
                       {t.program}
                     </span>
-                    <span className="font-medium text-[#000000]">{project.specs.programme}</span>
+                    <span className="font-medium text-[#000000]">{activeSpecs.programme}</span>
                   </div>
                   <div>
                     <span className="font-label-technical text-[10px] text-[#747878] uppercase block mb-1">
                       {t.location}
                     </span>
-                    <span className="font-medium text-[#000000]">{project.specs.localisation}</span>
+                    <span className="font-medium text-[#000000]">{activeSpecs.localisation}</span>
                   </div>
                 </div>
 
@@ -136,7 +142,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                       {t.materials}
                     </span>
                     <ul className="space-y-1.5 font-body-sm text-[#444748]">
-                      {project.specs.materiaux.map((m, i) => (
+                      {activeSpecs.materiaux.map((m, i) => (
                         <li key={i} className="flex items-start gap-2">
                           <span className="text-[#000000]">·</span>
                           <span>{m}</span>
@@ -150,7 +156,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                       {t.missions}
                     </span>
                     <ul className="space-y-1.5 font-body-sm text-[#444748]">
-                      {project.specs.phases.map((p, i) => (
+                      {activeSpecs.phases.map((p, i) => (
                         <li key={i} className="flex items-start gap-2">
                           <span className="text-[#000000]">·</span>
                           <span>{p}</span>
