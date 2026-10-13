@@ -80,6 +80,13 @@ export const TRANSLATIONS = {
         commercial: 'Tertiaire',
         civil: 'Génie civil',
       },
+      videoGallery: {
+        tag: 'VIDÉOS DE CHANTIERS',
+        title: 'L’exécution sur le terrain, en images animées.',
+        desc: 'Suivez nos équipes d’ingénieurs et d’ouvriers au cœur des chantiers en République Démocratique du Congo.',
+        playBtn: 'Visionner le chantier',
+        closeBtn: 'Fermer la vidéo',
+      },
       viewProjectAria: 'Découvrir le projet',
     },
     services: {
@@ -371,6 +378,13 @@ export const TRANSLATIONS = {
         residential: 'Residential',
         commercial: 'Commercial',
         civil: 'Civil Engineering',
+      },
+      videoGallery: {
+        tag: 'ON-SITE VIDEOS',
+        title: 'Field execution captured in motion.',
+        desc: 'Follow our engineering teams and construction craftsmen on active sites across the Democratic Republic of Congo.',
+        playBtn: 'Watch site video',
+        closeBtn: 'Close video player',
       },
       viewProjectAria: 'View project',
     },
