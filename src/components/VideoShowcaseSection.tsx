@@ -1,7 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import { Language } from '../types';
 import { TRANSLATIONS } from '../data/translations';
-import { Upload, CheckCircle2 } from 'lucide-react';
 import videoPosterChantier from '../assets/images/video_poster_chantier_1790686955515.jpg';
 
 interface VideoShowcaseSectionProps {
@@ -11,60 +10,7 @@ interface VideoShowcaseSectionProps {
 
 export const VideoShowcaseSection: React.FC<VideoShowcaseSectionProps> = ({ language }) => {
   const t = TRANSLATIONS[language].video;
-  const [videoSrc, setVideoSrc] = useState<string>('/videos/chantier_villa_lubumbashi.mp4');
-  const [isCustomUpload, setIsCustomUpload] = useState<boolean>(false);
-  const [uploadStatus, setUploadStatus] = useState<string | null>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Check if a custom video blob was previously stored in sessionStorage
-  useEffect(() => {
-    try {
-      const stored = sessionStorage.getItem('mha_custom_video_uploaded');
-      if (stored) {
-        setIsCustomUpload(true);
-      }
-    } catch {
-      // Ignore storage errors
-    }
-  }, []);
-
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    // Immediately play the selected file locally via object URL
-    const localUrl = URL.createObjectURL(file);
-    setVideoSrc(localUrl);
-    setIsCustomUpload(true);
-    setUploadStatus(language === 'FR' ? 'Vidéo chargée avec succès' : 'Video loaded successfully');
-
-    try {
-      sessionStorage.setItem('mha_custom_video_uploaded', 'true');
-    } catch {
-      // Ignore
-    }
-
-    // Also attempt background sync to server dev endpoint
-    try {
-      await fetch('/api/upload-video', {
-        method: 'POST',
-        headers: { 'Content-Type': file.type || 'video/mp4' },
-        body: file,
-      });
-    } catch {
-      // Local preview continues regardless
-    }
-
-    if (videoRef.current) {
-      videoRef.current.load();
-      videoRef.current.play().catch(() => {});
-    }
-
-    setTimeout(() => {
-      setUploadStatus(null);
-    }, 4000);
-  };
+  const videoSrc = `${import.meta.env.BASE_URL}videos/chantier_villa_lubumbashi.mp4`;
 
   return (
     <section
@@ -91,7 +37,6 @@ export const VideoShowcaseSection: React.FC<VideoShowcaseSectionProps> = ({ lang
         <div className="flex flex-col items-center">
           <div className="relative w-full max-w-[360px] sm:max-w-[400px] aspect-[9/16] bg-[#050505] border border-[#2a2b2a] shadow-2xl overflow-hidden group">
             <video
-              ref={videoRef}
               src={videoSrc}
               poster={videoPosterChantier}
               controls
@@ -100,43 +45,11 @@ export const VideoShowcaseSection: React.FC<VideoShowcaseSectionProps> = ({ lang
               className="w-full h-full object-cover"
               aria-label={t.title}
             >
-              <source src="/videos/chantier_villa_lubumbashi.mp4" type="video/mp4" />
+              <source src={videoSrc} type="video/mp4" />
               {language === 'FR'
                 ? 'Votre navigateur ne supporte pas la lecture de vidéos.'
                 : 'Your browser does not support the video tag.'}
             </video>
-          </div>
-
-          {/* Option discrète pour charger le fichier source original direct */}
-          <div className="mt-4 flex flex-col items-center gap-2">
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="video/*,.mp4,.mov,.webm"
-              onChange={handleFileChange}
-              className="hidden"
-              id="raw-video-input"
-            />
-
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className="inline-flex items-center gap-1.5 text-[11px] font-label-technical uppercase tracking-wider text-[#747878] hover:text-[#c7a97b] transition-colors cursor-pointer py-1 px-3 border border-[#232423] hover:border-[#c7a97b]/50 bg-black/40"
-            >
-              <Upload className="w-3 h-3" />
-              <span>
-                {language === 'FR'
-                  ? 'Charger un autre fichier vidéo (.mp4)'
-                  : 'Load another video file (.mp4)'}
-              </span>
-            </button>
-
-            {uploadStatus && (
-              <div className="flex items-center gap-1.5 text-xs text-[#c7a97b] font-label-technical tracking-wider">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>{uploadStatus}</span>
-              </div>
-            )}
           </div>
 
           {/* Légende Architecturale Inférieure */}

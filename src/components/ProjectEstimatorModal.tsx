@@ -28,8 +28,29 @@ export const ProjectEstimatorModal: React.FC<ProjectEstimatorModalProps> = ({
 }) => {
   const t = TRANSLATIONS[language].estimator;
 
+  // Helper to resolve localized title from id or cross-language title
+  const resolveProgramTitle = (input: string, lang: Language) => {
+    if (!input) return TRANSLATIONS[lang].estimator.programs[0].title;
+    const progs = TRANSLATIONS[lang].estimator.programs;
+    const matchById = progs.find((p) => p.id === input);
+    if (matchById) return matchById.title;
+    const otherLang: Language = lang === 'FR' ? 'EN' : 'FR';
+    const otherProgs = TRANSLATIONS[otherLang].estimator.programs;
+    const otherMatch = otherProgs.find(
+      (p) => p.title.toLowerCase() === input.toLowerCase() || p.id === input
+    );
+    if (otherMatch) {
+      const corresponding = progs.find((p) => p.id === otherMatch.id);
+      if (corresponding) return corresponding.title;
+    }
+    const directMatch = progs.find((p) => p.title.toLowerCase() === input.toLowerCase());
+    return directMatch ? directMatch.title : input;
+  };
+
   const [step, setStep] = useState<1 | 2 | 3>(1);
-  const [programType, setProgramType] = useState(initialProgram || t.programs[0].title);
+  const [programType, setProgramType] = useState(() =>
+    resolveProgramTitle(initialProgram || t.programs[0].title, language)
+  );
   const [city, setCity] = useState('Kinshasa');
   const [surface, setSurface] = useState(850);
   const [phases, setPhases] = useState<string[]>([
@@ -42,12 +63,12 @@ export const ProjectEstimatorModal: React.FC<ProjectEstimatorModalProps> = ({
   const [clientPhone, setClientPhone] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
-  // Sync initial program if changed
+  // Sync initial program if changed or language changed
   useEffect(() => {
     if (initialProgram) {
-      setProgramType(initialProgram);
+      setProgramType(resolveProgramTitle(initialProgram, language));
     }
-  }, [initialProgram]);
+  }, [initialProgram, language]);
 
   useEffect(() => {
     if (!isOpen) return;

@@ -93,12 +93,12 @@ export default function App() {
           onNavigateSection={handleNavigateSection}
         />
 
-        {/* 03 — Expertises : 4 pôles clairs avec flèche */}
+        {/* 03 — Nos Services & Fournitures : 4 catégories avec galeries et devis */}
         <ExpertisePillars
           language={language}
-          onSelectPole={(idx) => {
-            const poles = ['Architecture', 'Ingénierie', 'Construction', 'Conseil'];
-            handleOpenEstimatorWithProgram(poles[idx]);
+          isEstimatorOpen={estimatorOpen}
+          onSelectPole={(poleOrId) => {
+            handleOpenEstimatorWithProgram(poleOrId);
           }}
         />
 
