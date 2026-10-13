@@ -38,7 +38,7 @@ export const VideoShowcaseSection: React.FC<VideoShowcaseSectionProps> = ({ lang
 
         {/* Lecteur Vidéo Brut au Format Vertical 9:16 Smartphone */}
         <div className="flex flex-col items-center">
-          <div className="relative w-full max-w-[360px] sm:max-w-[400px] aspect-[9/16] bg-[#050505] border border-[#2a2b2a] shadow-2xl overflow-hidden group">
+          <div className="relative mx-auto w-full max-w-[360px] sm:max-w-[400px] aspect-[9/16] bg-[#050505] border border-[#2a2b2a] shadow-2xl overflow-hidden group">
             <video
               src={videoSrc}
               poster={videoPosterChantier}
