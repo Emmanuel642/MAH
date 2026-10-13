@@ -39,6 +39,7 @@ export default function App() {
   }, [language]);
   const [activeCity, setActiveCity] = useState<'Kinshasa' | 'Lubumbashi'>('Lubumbashi');
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+  const [isVideoGalleryOpen, setIsVideoGalleryOpen] = useState(false);
   const [estimatorOpen, setEstimatorOpen] = useState(false);
   const [initialEstimatorProgram, setInitialEstimatorProgram] = useState('');
 
@@ -108,6 +109,7 @@ export default function App() {
         {/* 05 — Vidéo Chantier & Visite Immersive : mise en avant pour le storytelling du projet */}
         <VideoShowcaseSection
           language={language}
+          onOpenVideoGallery={() => setIsVideoGalleryOpen(true)}
           onOpenEstimator={() => handleOpenEstimatorWithProgram('Suivi de chantier & Réalisation')}
         />
 
@@ -117,6 +119,8 @@ export default function App() {
           language={language}
           onSelectProject={handleOpenProject}
           onNavigateSection={handleNavigateSection}
+          isVideoGalleryOpen={isVideoGalleryOpen}
+          onVideoGalleryOpenChange={setIsVideoGalleryOpen}
         />
 
         {/* 06 — Services : 4 textes courts éditoriaux */}

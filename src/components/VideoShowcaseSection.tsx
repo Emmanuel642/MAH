@@ -2,14 +2,17 @@ import React from 'react';
 import { Language } from '../types';
 import { TRANSLATIONS } from '../data/translations';
 import videoPosterChantier from '../assets/images/video_poster_chantier_1790686955515.jpg';
+import { Film } from 'lucide-react';
 
 interface VideoShowcaseSectionProps {
   language: Language;
   onOpenEstimator?: () => void;
+  onOpenVideoGallery: () => void;
 }
 
-export const VideoShowcaseSection: React.FC<VideoShowcaseSectionProps> = ({ language }) => {
+export const VideoShowcaseSection: React.FC<VideoShowcaseSectionProps> = ({ language, onOpenVideoGallery }) => {
   const t = TRANSLATIONS[language].video;
+  const galleryButtonLabel = TRANSLATIONS[language].projects.videoGallery.galleryBtn;
   const videoSrc = `${import.meta.env.BASE_URL}videos/chantier_villa_lubumbashi.mp4`;
 
   return (
@@ -51,6 +54,16 @@ export const VideoShowcaseSection: React.FC<VideoShowcaseSectionProps> = ({ lang
                 : 'Your browser does not support the video tag.'}
             </video>
           </div>
+
+          <button
+            type="button"
+            onClick={onOpenVideoGallery}
+            className="mt-5 inline-flex items-center gap-2 border border-[#c7a97b] px-5 py-3 font-label-technical text-[10px] uppercase tracking-widest text-[#c7a97b] transition-colors hover:bg-[#c7a97b] hover:text-[#0d0e0d]"
+            aria-label={galleryButtonLabel}
+          >
+            <Film className="h-4 w-4" />
+            <span>{galleryButtonLabel}</span>
+          </button>
 
           {/* Légende Architecturale Inférieure */}
           <div className="w-full max-w-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 pt-6 mt-4 text-[10px] sm:text-[11px] font-label-technical tracking-wider text-[#747878] uppercase border-t border-[#232423]">

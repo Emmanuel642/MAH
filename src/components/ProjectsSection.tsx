@@ -19,15 +19,18 @@ interface ProjectsSectionProps {
   language: Language;
   onSelectProject: (projectId: string) => void;
   onNavigateSection: (sectionId: string) => void;
+  isVideoGalleryOpen: boolean;
+  onVideoGalleryOpenChange: (isOpen: boolean) => void;
 }
 
 export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   projects,
   language,
   onSelectProject,
+  isVideoGalleryOpen,
+  onVideoGalleryOpenChange,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<ProjectCategory>('Tous');
-  const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
   const [activeVideoIndex, setActiveVideoIndex] = useState<number | null>(null);
 
   const t = TRANSLATIONS[language].projects;
@@ -50,7 +53,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
 
   // Handle body scroll lock and keyboard shortcuts for modal
   useEffect(() => {
-    if (!isGalleryModalOpen) return;
+    if (!isVideoGalleryOpen) return;
 
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -62,7 +65,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
           setActiveVideoIndex(null);
         } else {
           // If on gallery grid, close modal
-          setIsGalleryModalOpen(false);
+          onVideoGalleryOpenChange(false);
         }
       } else if (activeVideoIndex !== null) {
         if (e.key === 'ArrowLeft') {
@@ -82,10 +85,10 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
       document.body.style.overflow = prevOverflow;
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isGalleryModalOpen, activeVideoIndex]);
+  }, [isVideoGalleryOpen, activeVideoIndex, onVideoGalleryOpenChange]);
 
   const handleCloseModal = () => {
-    setIsGalleryModalOpen(false);
+    onVideoGalleryOpenChange(false);
     setActiveVideoIndex(null);
   };
 
@@ -106,7 +109,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
             </p>
           </div>
 
-          {/* Category Filters + Bouton discret & élégant d'accès à la galerie vidéo */}
+          {/* Category Filters */}
           <div className="flex flex-wrap items-center gap-2 pt-2 max-w-full">
             {categories.map((cat) => (
               <button
@@ -122,21 +125,6 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
               </button>
             ))}
 
-            {/* Bouton d'accès à la galerie vidéo dédiée */}
-            <button
-              onClick={() => {
-                setIsGalleryModalOpen(true);
-                setActiveVideoIndex(null);
-              }}
-              className="px-4 py-2 font-label-technical text-[10px] uppercase tracking-widest transition-all cursor-pointer border border-[#765935] bg-[#faf9f6] text-[#765935] hover:bg-[#765935] hover:text-white flex items-center gap-2 shrink-0 group shadow-xs"
-              aria-label={t.videoGallery.galleryBtn}
-            >
-              <Film className="w-3.5 h-3.5 transition-transform group-hover:scale-110" />
-              <span>{t.videoGallery.galleryBtn}</span>
-              <span className="text-[9px] bg-[#765935]/15 group-hover:bg-white/20 text-[#765935] group-hover:text-white px-1.5 py-0.5 font-bold transition-colors">
-                {REALIZATIONS_VIDEOS.length}
-              </span>
-            </button>
           </div>
         </div>
 
@@ -198,7 +186,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
       {/* ========================================================================= */}
       {/* MODAL DÉDIÉ : GALERIE VIDÉO DES CHANTIERS DE RÉALISATIONS                  */}
       {/* ========================================================================= */}
-      {isGalleryModalOpen && (
+      {isVideoGalleryOpen && (
         <div
           role="dialog"
           aria-modal="true"
