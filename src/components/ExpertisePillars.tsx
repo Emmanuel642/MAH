@@ -13,8 +13,9 @@ import {
 } from 'lucide-react';
 
 // Static ES Imports for Category 01 — Vente de matériaux
-import materiauxDepotCover from '../assets/images/materiaux_depot_cover_1791885249795.jpg';
-import materiauxBriquesFer from '../assets/images/materiaux_briques_fer_1791885336113.jpg';
+import materiauxDepotCover from '../assets/images/materiaux_depot_cover_1791885249795.jpeg';
+import materiauxBriquesFer from '../assets/images/materiaux_briques_fer_1791885336113.jpeg';
+import blocCiment from '../assets/images/Bloc ciment.jpeg';
 import materiauxSableGravier from '../assets/images/materiaux_sable_gravier_1791886115011.jpg';
 import parkingMetallique from '../assets/images/parking_metallique_1790686297016.jpg';
 
@@ -90,15 +91,15 @@ export const SERVICES_CATEGORIES: ServiceCategory[] = [
     gallery: [
       {
         id: 'mat-1',
-        titleFR: 'Briques cuites & Blocs de maçonnerie',
-        titleEN: 'Fired Clay Bricks & Masonry Blocks',
-        legendFR: 'Briques cuites régulières destinées aux élévations, murs porteurs et clôtures parcellaires.',
-        legendEN: 'Calibrated fired bricks for structural elevations, load-bearing walls, and compound fencing.',
-        image: materiauxBriquesFer,
-        badgeFR: 'Gros œuvre',
-        badgeEN: 'Masonry',
-        altFR: 'Piles de briques cuites de construction sur palette de chantier',
-        altEN: 'Stacks of fired clay building bricks on a wooden construction pallet',
+        titleFR: 'Briques cuites & Blocs de ciment',
+        titleEN: 'Building Bricks & Concrete Blocks',
+        legendFR: 'Briques et blocs de ciment réguliers calibrés pour élévations, murs porteurs et clôtures de concession.',
+        legendEN: 'Calibrated building bricks and concrete blocks for structural walls and perimeter fences.',
+        image: blocCiment,
+        badgeFR: 'Briques & Blocs',
+        badgeEN: 'Bricks & Blocks',
+        altFR: 'Blocs de ciment et briques de maçonnerie pour construction',
+        altEN: 'Concrete blocks and masonry building bricks on site',
       },
       {
         id: 'mat-2',
